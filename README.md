@@ -17,6 +17,9 @@ This list of phishing sites will be used to determine the effectiveness of the d
 Link to repo: https://github.com/mitchellkrogza/Phishing.Database
 
 
+## Goals
+For this project, we will be replicating the phishing detection model developed by the author's of the paper. To do this, we will implement the model in Python3. The model as well as the phishing detection algorithm can be seen below.
+
 ### Phishing Detection Model
 This is taken directly from the author's of the paper linked above:
 
