@@ -25,9 +25,6 @@ def save_whitelist():
 def main():
     load_whitelist()
     
-
-
-
     save_whitelist()
 
 if __name__ == "__main__":
