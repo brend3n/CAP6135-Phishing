@@ -9,3 +9,9 @@ This paper describes a novel implementation for phishing detection on the intern
 we will implement the phishing detection model and then we will compare our results with the
 results of the original authors from their experiment.
 
+### Dataset
+
+After some research online, we found a github repo that contained a list of active phishing sites updated hourly.
+This list of phishing sites will be used to determine the effectiveness of the detection algorithm we are attempting to replicate.
+
+Link to repo: https://github.com/mitchellkrogza/Phishing.Database
