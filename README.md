@@ -15,3 +15,15 @@ After some research online, we found a github repo that contained a list of acti
 This list of phishing sites will be used to determine the effectiveness of the detection algorithm we are attempting to replicate.
 
 Link to repo: https://github.com/mitchellkrogza/Phishing.Database
+
+
+### Phishing Detection Model
+This is taken directly from the author's of the paper linked above:
+
+![image](https://user-images.githubusercontent.com/49283761/159128959-37272ac5-12ef-46ff-81cf-42c0b907be41.png)
+
+### Algorithm
+This is the phishing detection algoirthm for a webpage developed by the authors:
+
+![image](https://user-images.githubusercontent.com/49283761/159129007-ff04293c-5b9b-456c-ade1-95b9ea6b35cb.png)
+
