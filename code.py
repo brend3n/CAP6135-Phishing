@@ -34,6 +34,11 @@ def load_whitelist():
        ip = whitelist_line[1]
        g_whitelist[domain] = ip
 
+#! TODO: Not tested
+# Initializes an empty dictionary
+def init_whitelist():
+    g_whitelist = {}
+
 
 #! TODO: Not tested
 # Adds a new key-value pair to the whitelist
@@ -103,7 +108,7 @@ def phishing_detection_algo(webpage: str):
 def main():
     g_threshold = int(input("Adjust threshold: "))
 
-    load_whitelist()
+    init_whitelist()
     load_phishing_sites()
     
     for site in g_phishing_sites:
