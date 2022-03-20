@@ -12,16 +12,23 @@ g_whitelist = {}
 g_phishing_sites = []
 g_threshold = 1010
 
-#! TODO: Write this function
+#! TODO: PhishTank option seems better but need to do the following
+# Create an account, add user_agent to request, and parse json data -> Currently being rate limited
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
 def load_phishing_sites():
-    url = "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt"
-    content = requests.get(url).iter_lines()
-    for i in content:
-        link = i.decode("utf-8")
-        print(link)
-        g_phishing_sites.append(link)
-    
+    option = int(input("Enter: \n1. Phishing Repo\n2. PhishTank (data from paper)\n"))
+    if option == 1:
+        url = "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt"
+        content = requests.get(url).iter_lines()
+        for i in content:
+            link = i.decode("utf-8")
+            print(link)
+            g_phishing_sites.append(link)
+    elif option == 2:
+        url = "http://data.phishtank.com/data/online-valid.json"
+        content = requests.get(url)
+        print(content)
+        
     
 
 # Not sure if this will be used since paper states whitelist starts empty
@@ -61,6 +68,8 @@ def calculate_hyperlink(webpage: str):
     link_set = []
     num_links = 0
 
+    # Code goes here
+    
     return link_set, num_links
 
 #! TODO: Write this function
