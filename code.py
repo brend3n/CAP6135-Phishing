@@ -2,7 +2,12 @@ import requests
 import os
 import sys
 
-g_whitelist = []
+
+"""
+Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
+"""
+g_whitelist = {}
+
 g_phishing_sites = []
 g_threshold = 1010
 
@@ -22,14 +27,17 @@ def load_phishing_sites():
 # Loads the whitelist values into the script
 def load_whitelist():
     with open("whitelist.txt", "r") as f:
-       g_whitelist = f.readlines()
+       whitelist_line = f.readlines().split(",")
+       domain = whitelist_line[0] 
+       ip = whitelist_line[1]
+       g_whitelist[domain] = ip
 
-#! TODO: Not tested
+#! TODO: Update to be dictionary
 # Updates the whitelist with a new entry
 def update_whitelist(entry: str):
     g_whitelist.append(entry)
 
-#! TODO: Not tested
+#! TODO: Update to be dictionary
 # Save the current whitelist locally to whitelist.txt
 def save_whitelist():
     with open("whitelist.txt", "") as f:
@@ -79,7 +87,7 @@ def phishing_detection_algo(webpage: str):
 
     ratio = calc_ratio(webpage, hyperlinks_set, num_hyperlinks, count_self_ref_links)
 
-    if ratio > threshold:
+    if ratio > g_threshold:
         print("Webpage is Phishing")
     else:
         print("Webpage is Legitimate")
