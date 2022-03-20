@@ -36,7 +36,7 @@ def load_whitelist():
 
 
 #! TODO: Not tested
-# Updates the whitelist with a new entry
+# Adds a new key-value pair to the whitelist
 def update_whitelist(domain: str, ip: str):
     g_whitelist[domain] = ip
 
