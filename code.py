@@ -23,6 +23,7 @@ def load_phishing_sites():
         print(line)
     
 
+# Not sure if this will be used since paper states whitelist starts empty
 #! TODO: Not tested
 # Loads the whitelist values into the script
 def load_whitelist():
@@ -32,10 +33,12 @@ def load_whitelist():
        ip = whitelist_line[1]
        g_whitelist[domain] = ip
 
-#! TODO: Update to be dictionary
+
+#! TODO: Not tested
 # Updates the whitelist with a new entry
-def update_whitelist(entry: str):
-    g_whitelist.append(entry)
+def update_whitelist(domain: str, ip: str):
+    g_whitelist[domain] = ip
+
 
 #! TODO: Update to be dictionary
 # Save the current whitelist locally to whitelist.txt
