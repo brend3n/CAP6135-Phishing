@@ -1,6 +1,7 @@
 import requests
 import os
 import sys
+import json
 
 
 """
@@ -40,11 +41,12 @@ def update_whitelist(domain: str, ip: str):
     g_whitelist[domain] = ip
 
 
-#! TODO: Update to be dictionary
+#! TODO: Not tested
 # Save the current whitelist locally to whitelist.txt
 def save_whitelist():
-    with open("whitelist.txt", "") as f:
-        pass
+    with open("whitelist.txt", "w") as f:
+        # Dump contents of dictionary to file as json object
+        f.write(json.dumps(g_whitelist))
 
 
 #! TODO: Write this function
