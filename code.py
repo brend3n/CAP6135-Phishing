@@ -15,13 +15,13 @@ g_threshold = 1010
 #! TODO: Write this function
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
 def load_phishing_sites():
-    # Set g_phishing_sites to list [] of strings representing the sites
     url = "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt"
-    content = requests.get(url)
-
-    # Need to process data here to parse urls
-    for line in content:
-        print(line.text)
+    content = requests.get(url).iter_lines()
+    for i in content:
+        link = i.decode("utf-8")
+        print(link)
+        g_phishing_sites.append(link)
+    
     
 
 # Not sure if this will be used since paper states whitelist starts empty
