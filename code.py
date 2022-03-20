@@ -21,7 +21,7 @@ def load_phishing_sites():
 
     # Need to process data here to parse urls
     for line in content:
-        print(line)
+        print(line.text)
     
 
 # Not sure if this will be used since paper states whitelist starts empty
