@@ -10,7 +10,13 @@ g_threshold = 1010
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
 def load_phishing_sites():
     # Set g_phishing_sites to list [] of strings representing the sites
-    pass
+    url = "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt"
+    content = requests.get(url)
+
+    # Need to process data here to parse urls
+    for line in content:
+        print(line)
+    
 
 #! TODO: Not tested
 # Loads the whitelist values into the script
@@ -47,7 +53,7 @@ def get_self_ref_links(webpage: str):
 #! TODO: Not Tested
 # Ratio of hyperlinks points to foreign domains / total numer of hyperlinks
 # ratio = [1 - (count_self_ref_links / num_hyperlinks)]
-def calc_ratio(webpage: str, hyperlinks_set, num_hyperlinks: int, count_self_ref_links: int)
+def calc_ratio(webpage: str, hyperlinks_set, num_hyperlinks: int, count_self_ref_links: int):
 
     ratio = 1 - (count_self_ref_links / num_hyperlinks)
     return ratio
@@ -93,4 +99,5 @@ def main():
     save_whitelist()
 
 if __name__ == "__main__":
-    main()
+    # main()
+    load_phishing_sites()
