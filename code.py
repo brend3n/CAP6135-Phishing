@@ -88,7 +88,7 @@ def calc_ratio(webpage: str, hyperlinks_set, num_hyperlinks: int, count_self_ref
 #! TODO: Not Tested
 # This is the algorithm defined in the paper. Check the README for the
 # link to the paper.
-def phishing_detection_algo(webpage: str):
+def phishing_identification_algo(webpage: str):
 
     # Extract hyperlink data and number of hyperlinks on a given page
     hyperlinks_set, num_hyperlinks = calculate_hyperlink(webpage)    
@@ -113,7 +113,16 @@ def phishing_detection_algo(webpage: str):
 
         # Add valid domain to whitelist
         update_whitelist()
-    
+
+#! TODO: Need to implement phishing model for both modules
+# Module1: URL AND DNS MATCHING
+# Module2: PHISHING IDENTIFICATION
+def run(webpage: str):
+    """
+    This function should model the system described in the paper.
+    """
+    pass
+
 def main():
     g_threshold = int(input("Adjust threshold: "))
 
@@ -121,7 +130,8 @@ def main():
     load_phishing_sites()
     
     for site in g_phishing_sites:
-        phishing_detection_algo(site)
+        run(site)
+    
 
     save_whitelist()
 
