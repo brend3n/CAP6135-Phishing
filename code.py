@@ -2,6 +2,7 @@ import requests
 import os
 import sys
 import json
+import extern_logger as logger
 
 
 """
