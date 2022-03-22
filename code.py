@@ -107,6 +107,8 @@ def calc_ratio(webpage: str, hyperlinks_set, num_hyperlinks: int, count_self_ref
 #! TODO: Not Tested
 # This is the algorithm defined in the paper. Check the README for the
 # link to the paper.
+
+# Returns 0 if page is phishing, otherwise returns 1
 def phishing_identification_algo(webpage: str):
 
     # Extract hyperlink data and number of hyperlinks on a given page
@@ -114,12 +116,12 @@ def phishing_identification_algo(webpage: str):
 
     if len(hyperlinks_set) == 0:
         print("Webpage is Phishing")
-        return
+        return 0
 
     for link in hyperlinks_set:
         if link is None:
             print("Webpage is Phishing")
-            return
+            return 0
     
     count_self_ref_links = get_self_ref_links(webpage)
 
@@ -127,13 +129,14 @@ def phishing_identification_algo(webpage: str):
 
     if ratio > g_threshold:
         print("Webpage is Phishing")
+        return 0
     else:
         print("Webpage is Legitimate")
 
         # Add valid domain to whitelist
         update_whitelist()
 
-    return
+    return 1
 
 #! TODO: Need to implement phishing model for both modules
 # Module1: URL AND DNS MATCHING
