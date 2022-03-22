@@ -61,7 +61,6 @@ def save_whitelist():
         # Dump contents of dictionary to file as json object
         f.write(json.dumps(g_whitelist))
 
-
 #! TODO: Write this function
 # Do a DNS lookup
 def dns_lookup():
@@ -143,6 +142,12 @@ def run(webpage: str):
     """
     This function should model the system described in the paper.
     """
+
+    if page in g_whitelist:
+        pass
+    else: # page not in whitelist
+        phishing_identification_algo(webpage)
+
     pass
 
 def main():
