@@ -3,7 +3,7 @@ import os
 import sys
 import json
 import extern_logger as logger
-
+from dns import resolver    # DNS Lookup
 
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
