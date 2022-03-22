@@ -149,7 +149,11 @@ def run(webpage: str):
     if page in g_whitelist:
         pass
     else: # page not in whitelist
-        phishing_identification_algo(webpage)
+        ret_val = phishing_identification_algo(webpage)
+        if ret_val != 0:
+            # not phishing
+        else: 
+            # phishing
 
     pass
 
