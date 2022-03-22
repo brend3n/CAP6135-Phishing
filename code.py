@@ -69,13 +69,20 @@ def calculate_hyperlink(webpage: str):
     num_links = 0
 
     # Code goes here
+
+    # 1. linkset :=  all links
+    # 2. num_links := length of linkset
     
     return link_set, num_links
 
 #! TODO: Write this function
 # Count number of hyperlinks pointing to own domain
 def get_self_ref_links(webpage: str):
-    pass
+    count = 0
+
+    # count := number of self-referencing links
+
+    return count
 
 #! TODO: Not Tested
 # Ratio of hyperlinks points to foreign domains / total numer of hyperlinks
