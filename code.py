@@ -63,6 +63,17 @@ def save_whitelist():
 
 
 #! TODO: Write this function
+# Do a DNS lookup
+def dns_lookup():
+    return
+
+#! TODO: Write this function
+def is_match():
+    return
+
+
+
+#! TODO: Write this function
 # Extract the hyperlink set from the given webpage
 def calculate_hyperlink(webpage: str):
 
