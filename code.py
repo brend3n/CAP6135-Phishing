@@ -85,6 +85,7 @@ def get_self_ref_links(webpage: str):
     return count
 
 #! TODO: Not Tested
+# This should be done since this is directly from the paper
 # Ratio of hyperlinks points to foreign domains / total numer of hyperlinks
 # ratio = [1 - (count_self_ref_links / num_hyperlinks)]
 def calc_ratio(webpage: str, hyperlinks_set, num_hyperlinks: int, count_self_ref_links: int):
@@ -120,6 +121,8 @@ def phishing_identification_algo(webpage: str):
 
         # Add valid domain to whitelist
         update_whitelist()
+
+    return
 
 #! TODO: Need to implement phishing model for both modules
 # Module1: URL AND DNS MATCHING
