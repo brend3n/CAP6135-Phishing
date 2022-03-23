@@ -1,6 +1,11 @@
 # CAP6135 - Term Project
 ### Phishing Detection Report Replication and Analysis
 
+### Installation and Use
+Run the following command in a fresh virtual environment:
+`pip3 install -r requirements.txt`  
+
+
 ### Paper
 Link:  https://jis-eurasipjournals.springeropen.com/articles/10.1186/s13635-016-0034-3
 
