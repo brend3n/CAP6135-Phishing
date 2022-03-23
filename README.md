@@ -2,7 +2,8 @@
 ### Phishing Detection Report Replication and Analysis
 
 ### Installation and Use
-Run the following command in a fresh virtual environment:
+Run the following command in a fresh virtual environment
+
 `pip3 install -r requirements.txt`  
 
 
