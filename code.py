@@ -157,12 +157,15 @@ def run(webpage: str):
             then call phishing_identifcation_module
 
         '''
+        pass
     else: # page not in whitelist
         ret_val = phishing_identification_algo(webpage)
         if ret_val != 0:
             # not phishing
+            pass
         else: 
             # phishing
+            pass
 
     pass
 
