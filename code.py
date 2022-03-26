@@ -2,6 +2,7 @@ import requests
 import os
 import sys
 import json
+#import extern_logger as logger
 from dns import resolver    # DNS Lookup
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urlparse
@@ -9,8 +10,8 @@ from urllib.parse import urlparse
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
 """
-
 g_whitelist = {}
+
 g_phishing_sites = []
 g_threshold = 1010
 
@@ -18,8 +19,6 @@ g_threshold = 1010
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
 def load_phishing_sites():
-    global g_phishing_sites
-    
     option = int(input("Enter: \n1. Phishing Repo\n2. PhishTank (data from paper)\n"))
     if option == 1:
         url = "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt"
@@ -39,8 +38,6 @@ def load_phishing_sites():
 #! TODO: Not tested
 # Loads the whitelist values into the script
 def load_whitelist():
-    global g_whitelist
-    
     with open("whitelist.txt", "r") as f:
        whitelist_line = f.readlines().split(",")
        domain = whitelist_line[0] 
@@ -50,20 +47,18 @@ def load_whitelist():
 #! TODO: Not tested
 # Initializes an empty dictionary
 def init_whitelist():
-    global g_whitelist
     g_whitelist = {}
+
 
 #! TODO: Not tested
 # Adds a new key-value pair to the whitelist
 def update_whitelist(domain: str, ip: str):
-    global g_whitelist
     g_whitelist[domain] = ip
 
 
 #! TODO: Not tested
 # Save the current whitelist locally to whitelist.txt
 def save_whitelist():
-    global g_whitelist
     with open("whitelist.txt", "w") as f:
         # Dump contents of dictionary to file as json object
         f.write(json.dumps(g_whitelist))
@@ -77,19 +72,18 @@ def dns_lookup():
 def is_match():
     return
 
-
-#! TODO: Write this function
 # Extract the hyperlink set from the given webpage
-def calculate_hyperlink(webpage: str):
-
+def calculate_hyperlink(url: str):
+    url_p=urlparse(url)
+    domain='{uri.scheme}://{uri.netloc}/'.format(uri=url_p)
+    resp=requests.get(url)
+    soup=bs(resp.text,'html.parser')
+    num_links=0
     link_set = []
-    num_links = 0
-
-    # Code goes here
-
-    # 1. linkset :=  all links
-    # 2. num_links := length of linkset
-    
+    for link in soup.find_all('a'):
+        temp=link.get('href')
+        link_set.append(temp)
+        num_links=num_links+1
     return link_set, num_links
 
 # Count number of hyperlinks pointing to own domain
@@ -98,12 +92,12 @@ def get_self_ref_links(url: str):
     domain='{uri.scheme}://{uri.netloc}/'.format(uri=url_p)
     resp=requests.get(url)
     soup=bs(resp.text,'html.parser')
-    r=0
+    num_links=0
     for link in soup.find_all('a'):
         temp=link.get('href')
         if temp is not None and domain in temp:
-          r=r+1
-    return r
+          num_links=num_links+1
+    return num_links
 
 #! TODO: Not Tested
 # This should be done since this is directly from the paper
@@ -179,10 +173,6 @@ def run(webpage: str):
     pass
 
 def main():
-    global g_phishing_sites
-    global g_threshold
-    global g_whitelist
-
     g_threshold = int(input("Adjust threshold: "))
 
     init_whitelist()
