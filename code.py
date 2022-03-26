@@ -35,12 +35,12 @@ def load_phishing_sites():
             content = requests.get(url)
             print(content)
         else:
-            with open("test_data.json", "r") as f:
+            with open("FULL.json", "r") as f:
                 content = json.load(f)
                 g_phishing_sites, num_urls = get_urls_from_json(content)
-                print(f'Number of urls: {num_urls}')
                 print("URLs:")
                 [print(url) for url in g_phishing_sites]
+                print(f'Number of urls: {num_urls}')
                 
             
         
