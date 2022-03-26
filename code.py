@@ -2,7 +2,6 @@ import requests
 import os
 import sys
 import json
-#import extern_logger as logger
 from dns import resolver    # DNS Lookup
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urlparse
