@@ -19,6 +19,8 @@ g_threshold = 1010
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
 def load_phishing_sites():
+    global g_phishing_sites
+    content = None
     option = int(input("Enter: \n1. Phishing Repo\n2. PhishTank (data from paper)\n"))
     if option == 1:
         url = "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt"
@@ -28,12 +30,29 @@ def load_phishing_sites():
             print(link)
             g_phishing_sites.append(link)
     elif option == 2:
-        url = "http://data.phishtank.com/data/online-valid.json"
-        content = requests.get(url)
-        print(content)
+        option = int(input("Enter: \n1. Fetch data\n2. Load data from test_data.json\n"))
+        if option == 1:
+            url = "http://data.phishtank.com/data/online-valid.json"
+            content = requests.get(url)
+            print(content)
+        else:
+            with open("test_data.json", "r") as f:
+                content = json.load(f)
+                g_phishing_sites, num_urls = get_urls_from_json(content)
+                print(f'Number of urls: {num_urls}')
+                print("URLs:")
+                [print(url) for url in g_phishing_sites]
+                
+            
         
+def get_urls_from_json(content):
+    urls = []
+    for entry in content:
+        url = entry['url']
+        # print(url)
+        urls.append(url)
+    return urls, len(urls)
     
-
 # Not sure if this will be used since paper states whitelist starts empty
 #! TODO: Not tested
 # Loads the whitelist values into the script
