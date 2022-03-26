@@ -104,7 +104,6 @@ def get_self_ref_links(url: str):
 # Ratio of hyperlinks points to foreign domains / total numer of hyperlinks
 # ratio = [1 - (count_self_ref_links / num_hyperlinks)]
 def calc_ratio(webpage: str, hyperlinks_set, num_hyperlinks: int, count_self_ref_links: int):
-
     ratio = 1 - (count_self_ref_links / num_hyperlinks)
     return ratio
 
