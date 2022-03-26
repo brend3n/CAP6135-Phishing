@@ -2,8 +2,10 @@ import requests
 import os
 import sys
 import json
-import extern_logger as logger
+#import extern_logger as logger
 from dns import resolver    # DNS Lookup
+from bs4 import BeautifulSoup as bs
+from urllib.parse import urlparse
 
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
@@ -71,7 +73,6 @@ def is_match():
     return
 
 
-
 #! TODO: Write this function
 # Extract the hyperlink set from the given webpage
 def calculate_hyperlink(webpage: str):
@@ -86,14 +87,18 @@ def calculate_hyperlink(webpage: str):
     
     return link_set, num_links
 
-#! TODO: Write this function
 # Count number of hyperlinks pointing to own domain
-def get_self_ref_links(webpage: str):
-    count = 0
-
-    # count := number of self-referencing links
-
-    return count
+def get_self_ref_links(url: str):
+    url_p=urlparse(url)
+    domain='{uri.scheme}://{uri.netloc}/'.format(uri=url_p)
+    resp=requests.get(url)
+    soup=bs(resp.text,'html.parser')
+    r=0
+    for link in soup.find_all('a'):
+        temp=link.get('href')
+        if temp is not None and domain in temp:
+          r=r+1
+    return r
 
 #! TODO: Not Tested
 # This should be done since this is directly from the paper
@@ -155,7 +160,6 @@ def run(webpage: str):
                 then Phishing site
         else Domain not matched:
             then call phishing_identifcation_module
-
         '''
         pass
     else: # page not in whitelist
