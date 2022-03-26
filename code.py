@@ -117,6 +117,14 @@ def get_self_ref_links(url: str):
           num_links=num_links+1
     return num_links
 
+# Get percentage of "#" hyperlinks in link set
+def get_percentage_null_hyperlinks(link_set):
+  num_links=0
+  for link in link_set:
+    if(link == "#"):
+      num_links=num_links+1
+  return ((num_links / len(link_set)) * 100)
+
 #! TODO: Not Tested
 # This should be done since this is directly from the paper
 # Ratio of hyperlinks points to foreign domains / total numer of hyperlinks
