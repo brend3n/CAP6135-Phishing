@@ -9,8 +9,8 @@ from urllib.parse import urlparse
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
 """
-g_whitelist = {}
 
+g_whitelist = {}
 g_phishing_sites = []
 g_threshold = 1010
 
@@ -18,6 +18,8 @@ g_threshold = 1010
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
 def load_phishing_sites():
+    global g_phishing_sites
+    
     option = int(input("Enter: \n1. Phishing Repo\n2. PhishTank (data from paper)\n"))
     if option == 1:
         url = "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt"
@@ -37,6 +39,8 @@ def load_phishing_sites():
 #! TODO: Not tested
 # Loads the whitelist values into the script
 def load_whitelist():
+    global g_whitelist
+    
     with open("whitelist.txt", "r") as f:
        whitelist_line = f.readlines().split(",")
        domain = whitelist_line[0] 
@@ -46,18 +50,20 @@ def load_whitelist():
 #! TODO: Not tested
 # Initializes an empty dictionary
 def init_whitelist():
+    global g_whitelist
     g_whitelist = {}
-
 
 #! TODO: Not tested
 # Adds a new key-value pair to the whitelist
 def update_whitelist(domain: str, ip: str):
+    global g_whitelist
     g_whitelist[domain] = ip
 
 
 #! TODO: Not tested
 # Save the current whitelist locally to whitelist.txt
 def save_whitelist():
+    global g_whitelist
     with open("whitelist.txt", "w") as f:
         # Dump contents of dictionary to file as json object
         f.write(json.dumps(g_whitelist))
@@ -173,6 +179,10 @@ def run(webpage: str):
     pass
 
 def main():
+    global g_phishing_sites
+    global g_threshold
+    global g_whitelist
+
     g_threshold = int(input("Adjust threshold: "))
 
     init_whitelist()
