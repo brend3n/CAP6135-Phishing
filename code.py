@@ -76,6 +76,18 @@ def save_whitelist():
         # Dump contents of dictionary to file as json object
         f.write(json.dumps(g_whitelist))
 
+
+#! TODO: Clean up url to extract domain name 
+# i.e. www.facebook.com/thisisanexample/... -> facebook.com
+def clean(url: str):
+    cleaned_url = url
+
+    # Clean url here
+
+    return cleaned_url
+
+
+
 #! TODO: Write this function
 # Do a DNS lookup
 # Return None if bad otherwise return IP
