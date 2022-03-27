@@ -28,6 +28,8 @@ def load_phishing_sites():
             link = i.decode("utf-8")
             print(link)
             g_phishing_sites.append(link)
+        
+        print("\nHere are the results. It is likely that some pages are not found because they were probably already taken down.")
     elif option == 2:
         option = int(input("Enter: \n1. Fetch data (Don't do this because API calls)\n2. Load data from test_data.json\n"))
         if option == 1:
@@ -88,6 +90,7 @@ def clean(url: str):
     return cleaned_url
 
 #! TODO: Need to make sure that dns lookup is done correctly and aligns with what the authors intended
+#! Read up on DNS poisoning
 # Do a DNS lookup
 # Return None if bad otherwise return IP
 def dns_lookup(url: str):
