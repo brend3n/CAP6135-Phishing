@@ -11,8 +11,8 @@ import socket
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
 """
 g_whitelist = {}
-
 g_phishing_sites = []
+num_urls = 0
 g_threshold = 1010
 
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
@@ -73,6 +73,7 @@ def update_whitelist(domain: str, ip: str):
 # Save the current whitelist locally to whitelist.txt
 def save_whitelist():
     with open("whitelist.txt", "w") as f:
+        
         # Dump contents of dictionary to file as json object
         f.write(json.dumps(g_whitelist))
 
@@ -86,9 +87,7 @@ def clean(url: str):
 
     return cleaned_url
 
-
-
-#! TODO: Write this function
+#! TODO: Need to make sure that dns lookup is done correctly and aligns with what the authors intended
 # Do a DNS lookup
 # Return None if bad otherwise return IP
 def dns_lookup(url: str):
@@ -108,7 +107,7 @@ def is_match():
 # Extract the hyperlink set from the given webpage
 def calculate_hyperlink(url: str):
     url_p=urlparse(url)
-    domain='{uri.scheme}://{uri.netloc}/'.format(uri=url_p) # Unused -> was there a reason for this or was it just copied and pasted over?
+    domain='{uri.scheme}://{uri.netloc}/'.format(uri=url_p) # TODO: Unused -> was there a reason for this or was it just copied and pasted over?
     resp=requests.get(url)
     soup=bs(resp.text,'html.parser')
     num_links=0
@@ -128,7 +127,7 @@ def get_self_ref_links(url: str):
     num_links=0
     for link in soup.find_all('a'):
         temp=link.get('href')
-        if temp is not None and domain in temp:
+        if temp is not None and domain in temp: # TODO: I think the None has to be a #, but im not sure
           num_links=num_links+1
     return num_links
 
@@ -226,5 +225,5 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    # load_phishing_sites()
-    dns_lookup('facebook.come')
+    load_phishing_sites()
+    # dns_lookup('facebook.com')
