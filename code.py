@@ -5,6 +5,7 @@ import json
 from dns import resolver    # DNS Lookup
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urlparse
+import socket                    
 
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
@@ -14,7 +15,6 @@ g_whitelist = {}
 g_phishing_sites = []
 g_threshold = 1010
 
-#! TODO: PhishTank option seems better but need to do the following
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
 def load_phishing_sites():
@@ -29,7 +29,7 @@ def load_phishing_sites():
             print(link)
             g_phishing_sites.append(link)
     elif option == 2:
-        option = int(input("Enter: \n1. Fetch data\n2. Load data from test_data.json\n"))
+        option = int(input("Enter: \n1. Fetch data (Don't do this because API calls)\n2. Load data from test_data.json\n"))
         if option == 1:
             url = "http://data.phishtank.com/data/online-valid.json"
             content = requests.get(url)
@@ -43,7 +43,7 @@ def load_phishing_sites():
                 print(f'Number of urls: {num_urls}')
                 
             
-        
+# Grabs all of the urls from the json content from PhishTank dataset
 def get_urls_from_json(content):
     urls = []
     for entry in content:
@@ -62,19 +62,14 @@ def load_whitelist():
        ip = whitelist_line[1]
        g_whitelist[domain] = ip
 
-#! TODO: Not tested
 # Initializes an empty dictionary
 def init_whitelist():
     g_whitelist = {}
 
-
-#! TODO: Not tested
 # Adds a new key-value pair to the whitelist
 def update_whitelist(domain: str, ip: str):
     g_whitelist[domain] = ip
 
-
-#! TODO: Not tested
 # Save the current whitelist locally to whitelist.txt
 def save_whitelist():
     with open("whitelist.txt", "w") as f:
@@ -83,8 +78,16 @@ def save_whitelist():
 
 #! TODO: Write this function
 # Do a DNS lookup
-def dns_lookup():
-    return
+# Return None if bad otherwise return IP
+def dns_lookup(url: str):
+    print(f"Name: {url}")
+    res = None
+    try:
+        res = socket.gethostbyname(url)
+        print(f"Host: {res}")
+        return res
+    except Exception as e:
+        return None
 
 #! TODO: Write this function
 def is_match():
@@ -93,7 +96,7 @@ def is_match():
 # Extract the hyperlink set from the given webpage
 def calculate_hyperlink(url: str):
     url_p=urlparse(url)
-    domain='{uri.scheme}://{uri.netloc}/'.format(uri=url_p)
+    domain='{uri.scheme}://{uri.netloc}/'.format(uri=url_p) # Unused -> was there a reason for this or was it just copied and pasted over?
     resp=requests.get(url)
     soup=bs(resp.text,'html.parser')
     num_links=0
@@ -211,4 +214,5 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    load_phishing_sites()
+    # load_phishing_sites()
+    dns_lookup('facebook.come')
