@@ -146,7 +146,7 @@ def get_domain(webpage: str):
 # % GOOD/
 # Extract the hyperlink set from the given webpage
 def calculate_hyperlink(url: str):
-    resp=requests.get(url)
+    resp=requests.get(url,timeout=5)
     soup=bs(resp.text,'html.parser')
     num_links=0
     link_set = []
@@ -174,7 +174,7 @@ def get_self_ref_links(url: str):
     domain = url_p.netloc
     print(f"page url: {url}\tpage domain: {domain}")
     
-    resp=requests.get(url)
+    resp=requests.get(url, timeout=5)
     soup=bs(resp.text,'html.parser')
     num_links=0
     
@@ -249,6 +249,7 @@ def phishing_identification_algo(webpage: str):
 
         # Add valid domain to whitelist
         update_whitelist()
+        save_whitelist()
 
     return 1
 
