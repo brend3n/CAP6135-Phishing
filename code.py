@@ -283,19 +283,23 @@ def run(webpage: str):
             # phishing
             g_determined_phishing.append(webpage)
     
-
+# ! TODO
+# Mirror the same analysis as found in the paper
+def analyze_results():
+    pass
 def main():
     g_threshold = int(input("Adjust threshold: "))
 
     init_whitelist()
     load_phishing_sites()
     
-    return 
     for site in g_phishing_sites:
         run(site)
+        
+    analyze_results()
     
 if __name__ == "__main__":
-    # main()
+    main()
     # load_phishing_sites()
     # test_whitelist()l
     # test_extraction_functions()
