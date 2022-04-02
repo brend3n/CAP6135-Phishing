@@ -147,7 +147,7 @@ def calculate_hyperlink(url: str):
         num_links=num_links+1
     return link_set, num_links
 
-# ! TEST
+# % GOOD -> Might do additional refining if other test cases arise
 def is_self_referencing(url: str, page_domain: str):
     print(f"url: {url} \t domain: {page_domain}\n")
     if len(url) > 0 and url[0] == "/": return True              # Link to a page on the site (file structure)
@@ -157,7 +157,7 @@ def is_self_referencing(url: str, page_domain: str):
     print("Not self referencing\n\n")
     return False
 
-# ! TEST
+# % GOOD -> Seems good at the moment
 # Count number of hyperlinks pointing to own domain
 def get_self_ref_links(url: str):
     
