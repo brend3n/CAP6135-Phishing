@@ -134,11 +134,9 @@ def dns_lookup(url: str):
 def is_match():
     return
 
-# ! TEST
+# % GOOD
 # Extract the hyperlink set from the given webpage
 def calculate_hyperlink(url: str):
-    url_p=urlparse(url)
-    domain='{uri.scheme}://{uri.netloc}/'.format(uri=url_p) # TODO: Unused -> was there a reason for this or was it just copied and pasted over?
     resp=requests.get(url)
     soup=bs(resp.text,'html.parser')
     num_links=0
@@ -171,6 +169,23 @@ def get_percentage_null_hyperlinks(link_set):
     if(link == "#"):
       num_links=num_links+1
   return ((num_links / len(link_set)) * 100)
+
+# Test to see if all the link extraction functions are working as described from the paper
+def test_extraction_functions():
+    link = input("Enter a link: ")
+    print(f"Testing: calculate_hyperlink() with URL: {link}\n")
+    link_set, num_links = calculate_hyperlink(link)
+    print(f"Results:\nlink_set: {link_set}\nnum_links: {num_links}\n")
+    print(f"Testing: get_self_ref_links() with URL: {link}\n")
+    num_self_ref_links = get_self_ref_links(link)
+    print(f"Results:\n Number of self referencing links: {num_self_ref_links}")
+    print(f"Testing: get_percentage_null_hyperlinks() with URL: {link}")
+    ret_val = get_percentage_null_hyperlinks(link_set)
+    print(f"Results: %/ null links: {ret_val}")
+    
+    
+    
+    
 
 #! TODO: Not Tested
 # This should be done since this is directly from the paper
@@ -267,5 +282,6 @@ def main():
 if __name__ == "__main__":
     # main()
     # load_phishing_sites()
-    test_whitelist()
+    # test_whitelist()
+    test_extraction_functions()
     # dns_lookup('facebook.com')
