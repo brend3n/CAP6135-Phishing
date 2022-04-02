@@ -286,7 +286,8 @@ def run(webpage: str):
 # ! TODO
 # Mirror the same analysis as found in the paper
 def analyze_results():
-    pass
+    print("Analyzing the results.")
+    
 def main():
     g_threshold = int(input("Adjust threshold: "))
 
