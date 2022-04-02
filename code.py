@@ -251,18 +251,12 @@ def run(webpage: str):
     This function should model the system described in the paper.
     """
 
+    # ! Need to get domain from webpage to check if in whitelist
     domain = get_domain(webpage)
+    
     if domain in g_whitelist:
         # Check if Domain Matched from DNS lookup
-        '''
-        If so:
-            if IP address matched
-                then Legitimate site
-            else if IP address not matched:
-                then Phishing site
-        else Domain not matched:
-            then call phishing_identifcation_module
-        '''
+
         dns_res = dns_lookup(webpage)
         
         if ip_match(domain, dns_res): # IP matched
