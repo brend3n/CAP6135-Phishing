@@ -17,6 +17,10 @@ domains = []
 num_urls = 0
 g_threshold = 1010
 
+
+g_determined_phishing = []
+g_determined_legitimate = []
+
 # % GOOD
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
@@ -134,6 +138,11 @@ def dns_lookup(url: str):
 def ip_match(domain: str, ip_to_match: str):
     return True if g_whitelist[domain] == ip_to_match else False
 
+# Returns the domain of a url
+def get_domain(webpage: str):
+    domain = urlparse(webpage).netloc
+    return domain
+
 # % GOOD/
 # Extract the hyperlink set from the given webpage
 def calculate_hyperlink(url: str):
@@ -247,16 +256,16 @@ def phishing_identification_algo(webpage: str):
 # Module1: URL AND DNS MATCHING
 # Module2: PHISHING IDENTIFICATION
 def run(webpage: str):
+    
     """
     This function should model the system described in the paper.
     """
 
-    # ! Need to get domain from webpage to check if in whitelist
-    domain = get_domain(webpage)
+    # Need to get domain from webpage to check if in whitelist
+    domain = get_domain(webpage).replace("www.", "")
     
     if domain in g_whitelist:
         # Check if Domain Matched from DNS lookup
-
         dns_res = dns_lookup(webpage)
         
         if ip_match(domain, dns_res): # IP matched
@@ -269,11 +278,11 @@ def run(webpage: str):
         ret_val = phishing_identification_algo(webpage)
         if ret_val != 0:
             # not phishing
-            pass
+            g_determined_legitimate.append(webpage)
         else: 
             # phishing
-            pass
-    pass
+            g_determined_phishing.append(webpage)
+    
 
 def main():
     g_threshold = int(input("Adjust threshold: "))
@@ -289,5 +298,5 @@ if __name__ == "__main__":
     # main()
     # load_phishing_sites()
     # test_whitelist()l
-    test_extraction_functions()
+    # test_extraction_functions()
     # dns_lookup('facebook.com')
