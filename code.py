@@ -41,9 +41,12 @@ def load_phishing_sites():
                 content = json.load(f)
                 g_phishing_sites, num_urls = get_urls_from_json(content)
                 print("URLs:")
-                [print(url) for url in g_phishing_sites]
-                print(f'Number of urls: {num_urls}')
+                # [print(url) for url in g_phishing_sites]
                 
+                domains = extract_domains(g_phishing_sites)     # Takes out only the domain name from each site
+                [print(url) for url in domains]
+                print(f'Number of urls: {num_urls}')
+
             
 # Grabs all of the urls from the json content from PhishTank dataset
 def get_urls_from_json(content):
@@ -78,16 +81,11 @@ def save_whitelist():
         
         # Dump contents of dictionary to file as json object
         f.write(json.dumps(g_whitelist))
-
-
-#! TODO: Clean up url to extract domain name 
+ 
+# GOOD maybe
 # i.e. www.facebook.com/thisisanexample/... -> facebook.com
-def clean(url: str):
-    cleaned_url = url
-
-    # Clean url here
-
-    return cleaned_url
+def extract_domains(domains: list):
+    return [urlparse(site).netloc.replace("www.", "") for site in domains]
 
 #! TODO: Need to make sure that dns lookup is done correctly and aligns with what the authors intended
 #! Read up on DNS poisoning
@@ -220,6 +218,7 @@ def main():
     init_whitelist()
     load_phishing_sites()
     
+    return 
     for site in g_phishing_sites:
         run(site)
     
