@@ -147,8 +147,13 @@ def calculate_hyperlink(url: str):
         num_links=num_links+1
     return link_set, num_links
 
-def is_self_referencing(url: str):
-    return True
+def is_self_referencing(url: str, page_domain: str):
+    print(f"url: {url} \t domain: {page_domain}")
+    if len(url) > 0 and url[0] == "/": return True              # Link to a page on the site (file structure)
+    elif page_domain.replace("www.", "") in url: return True    # Link has the same domain
+    elif len(url) > 1 and url[0] == "#": return True            # ie. #head -> Scrolling link to certain html-ID is self-referencing on the page -> automatic scrolling on page
+
+    return False
 
 # ! TEST
 # Count number of hyperlinks pointing to own domain
@@ -165,8 +170,7 @@ def get_self_ref_links(url: str):
     for link in soup.find_all('a'):
         temp=link.get('href')
         print(temp)
-        # if temp is not None and domain in temp:
-        if is_self_referencing(temp):
+        if is_self_referencing(temp, domain):
             num_links=num_links+1
     return num_links
 
