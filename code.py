@@ -41,11 +41,19 @@ def load_phishing_sites():
                 content = json.load(f)
                 g_phishing_sites, num_urls = get_urls_from_json(content)
                 print("URLs:")
-                # [print(url) for url in g_phishing_sites]
-                
                 domains = extract_domains(g_phishing_sites)     # Takes out only the domain name from each site
-                [print(url) for url in domains]
+                # [print(url) for url in domains]
                 print(f'Number of urls: {num_urls}')
+                
+                for i in range(len(g_phishing_sites)):
+                    print(f"~~~~~~~\nurl: {g_phishing_sites[i]}\ndomain: {domains[i]}\n~~~~~~~")
+                
+                len_g_p_sites = len(g_phishing_sites)
+                len_domains = len(domains)
+                print(f"Length of g_phishing_sites: {len_g_p_sites}")
+                print(f"Length of domains: {len_domains}")
+                
+                
 
             
 # Grabs all of the urls from the json content from PhishTank dataset
