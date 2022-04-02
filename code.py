@@ -134,7 +134,7 @@ def dns_lookup(url: str):
 def is_match():
     return
 
-# % GOOD
+# % GOOD/
 # Extract the hyperlink set from the given webpage
 def calculate_hyperlink(url: str):
     resp=requests.get(url)
@@ -184,6 +184,7 @@ def get_percentage_null_hyperlinks(link_set):
       num_links=num_links+1
   return ((num_links / len(link_set)) * 100)
 
+# % GOOD
 # Test to see if all the link extraction functions are working as described from the paper
 def test_extraction_functions():
     link = input("Enter a link: ")
@@ -213,7 +214,6 @@ def calc_ratio(num_hyperlinks: int, count_self_ref_links: int):
 # Returns 0 if page is phishing, otherwise returns 1
 def phishing_identification_algo(webpage: str):
 
-    # ! TODO: unsure of calculate_hyperlink is working but will assume it does for now
     # Extract hyperlink data and number of hyperlinks on a given page
     hyperlinks_set, num_hyperlinks = calculate_hyperlink(webpage)    
 
@@ -223,16 +223,14 @@ def phishing_identification_algo(webpage: str):
         return 0
 
     # Check for null hyperlinks
-    #! TODO: Paper says more than 80% of the hyperlinks are NULL
-    for link in hyperlinks_set:
-        if link is None:
-            print("Webpage is Phishing")
-            return 0
+    # ? Paper says more than 80% of the hyperlinks are NULL then phishing
+    if get_percentage_null_hyperlinks(hyperlinks_set) > 80.0:
+        print("Webpage is Phishing")
+        return 0
     
-    #! TODO: Need to ensure that this function is correct
     count_self_ref_links = get_self_ref_links(webpage)
 
-    # TODO: This function relies on the results of the other two functions
+    # ? This function relies on the results of the other two functions
     ratio = calc_ratio(num_hyperlinks, count_self_ref_links)
 
     if ratio > g_threshold:
