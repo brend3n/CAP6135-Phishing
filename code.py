@@ -180,26 +180,33 @@ def calc_ratio(webpage: str, hyperlinks_set, num_hyperlinks: int, count_self_ref
     ratio = 1 - (count_self_ref_links / num_hyperlinks)
     return ratio
 
-#! TODO: Not Tested
+# % Good: Structure conforms to Algorithm described in the paper
+# ! Bad: Need to ensure the functions are working as intended as described in paper
 # This is the algorithm defined in the paper. Check the README for the
 # link to the paper.
 # Returns 0 if page is phishing, otherwise returns 1
 def phishing_identification_algo(webpage: str):
 
+    # ! TODO: unsure of calculate_hyperlink is working but will assume it does for now
     # Extract hyperlink data and number of hyperlinks on a given page
     hyperlinks_set, num_hyperlinks = calculate_hyperlink(webpage)    
 
     if len(hyperlinks_set) == 0:
+        print("There are no hyperlinks extracted from webpage")
         print("Webpage is Phishing")
         return 0
 
+    # Check for null hyperlinks
+    #! TODO: Paper says more than 80% of the hyperlinks are NULL
     for link in hyperlinks_set:
         if link is None:
             print("Webpage is Phishing")
             return 0
     
+    #! TODO: Need to ensure that this function is correct
     count_self_ref_links = get_self_ref_links(webpage)
 
+    # TODO: This function relies on the results of the other two functions
     ratio = calc_ratio(webpage, hyperlinks_set, num_hyperlinks, count_self_ref_links)
 
     if ratio > g_threshold:
