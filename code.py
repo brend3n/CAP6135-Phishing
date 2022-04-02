@@ -152,7 +152,7 @@ def calculate_hyperlink(url: str):
 def get_self_ref_links(url: str):
     url_p=urlparse(url)
     domain = url_p.netloc
-    print(f"domain: {domain}")
+    print(f"url: {url}\tdomain: {domain}")
     resp=requests.get(url)
     soup=bs(resp.text,'html.parser')
     num_links=0
@@ -275,8 +275,6 @@ def main():
     for site in g_phishing_sites:
         run(site)
     
-
-    ()
 
 if __name__ == "__main__":
     # main()
