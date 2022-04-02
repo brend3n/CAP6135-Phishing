@@ -147,20 +147,27 @@ def calculate_hyperlink(url: str):
         num_links=num_links+1
     return link_set, num_links
 
+def is_self_referencing(url: str):
+    return True
+
 # ! TEST
 # Count number of hyperlinks pointing to own domain
 def get_self_ref_links(url: str):
+    
     url_p=urlparse(url)
     domain = url_p.netloc
     print(f"url: {url}\tdomain: {domain}")
+    
     resp=requests.get(url)
     soup=bs(resp.text,'html.parser')
     num_links=0
+    
     for link in soup.find_all('a'):
         temp=link.get('href')
         print(temp)
-        if temp is not None and domain in temp: # TODO: I think the None has to be a #, but im not sure
-          num_links=num_links+1
+        # if temp is not None and domain in temp:
+        if is_self_referencing(temp):
+            num_links=num_links+1
     return num_links
 
 # % GOOD
