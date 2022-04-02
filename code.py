@@ -55,9 +55,7 @@ def load_phishing_sites():
                 print(f"Length of g_phishing_sites: {len_g_p_sites}")
                 print(f"Length of domains: {len_domains}")
                 
-                
-
-            
+# % GOOD               
 # Grabs all of the urls from the json content from PhishTank dataset
 def get_urls_from_json(content):
     urls = []
@@ -77,14 +75,17 @@ def load_whitelist():
        ip = whitelist_line[1]
        g_whitelist[domain] = ip
 
+# % GOOD
 # Initializes an empty dictionary
 def init_whitelist():
     g_whitelist = {}
 
+# % GOOD
 # Adds a new key-value pair to the whitelist
 def update_whitelist(domain: str, ip: str):
     g_whitelist[domain] = ip
 
+# ! NEED TO TEST
 # Save the current whitelist locally to whitelist.txt
 def save_whitelist():
     with open("whitelist.txt", "w") as f:
@@ -92,7 +93,7 @@ def save_whitelist():
         # Dump contents of dictionary to file as json object
         f.write(json.dumps(g_whitelist))
  
-# GOOD maybe
+# % GOOD
 # i.e. www.facebook.com/thisisanexample/... -> facebook.com
 def extract_domains(domains: list):
     return [urlparse(site).netloc.replace("www.", "") for site in domains]
@@ -115,6 +116,7 @@ def dns_lookup(url: str):
 def is_match():
     return
 
+# ! TEST
 # Extract the hyperlink set from the given webpage
 def calculate_hyperlink(url: str):
     url_p=urlparse(url)
@@ -129,6 +131,7 @@ def calculate_hyperlink(url: str):
         num_links=num_links+1
     return link_set, num_links
 
+# ! TEST
 # Count number of hyperlinks pointing to own domain
 def get_self_ref_links(url: str):
     url_p=urlparse(url)
@@ -142,6 +145,7 @@ def get_self_ref_links(url: str):
           num_links=num_links+1
     return num_links
 
+# ! TEST
 # Get percentage of "#" hyperlinks in link set
 def get_percentage_null_hyperlinks(link_set):
   num_links=0
