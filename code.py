@@ -5,7 +5,8 @@ import json
 from dns import resolver    # DNS Lookup
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urlparse
-import socket                    
+import socket 
+import random                   
 
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
@@ -66,15 +67,12 @@ def get_urls_from_json(content):
         urls.append(url)
     return urls, len(urls)
     
-# Not sure if this will be used since paper states whitelist starts empty
-#! TODO: Not tested
+# % GOOD
 # Loads the whitelist values into the script
 def load_whitelist():
+    global g_whitelist
     with open("whitelist.txt", "r") as f:
-       whitelist_line = f.readlines().split(",")
-       domain = whitelist_line[0] 
-       ip = whitelist_line[1]
-       g_whitelist[domain] = ip
+       g_whitelist = json.load(f)
 
 # % GOOD
 # Initializes an empty dictionary
@@ -86,14 +84,33 @@ def init_whitelist():
 def update_whitelist(domain: str, ip: str):
     g_whitelist[domain] = ip
 
-# ! NEED TO TEST
+# % GOOD
 # Save the current whitelist locally to whitelist.txt
 def save_whitelist():
     with open("whitelist.txt", "w") as f:
         
         # Dump contents of dictionary to file as json object
         f.write(json.dumps(g_whitelist))
- 
+
+# % GOOD
+def test_whitelist():
+    num_entries = int(input("How many entries: "))
+    print(f"num_entries: {num_entries}")
+    init_whitelist()
+    for i in range(num_entries):
+        print(i)
+        str_t = "a"*random.randint(1,5)
+        str_c = "b"*random.randint(1,5)
+        update_whitelist(str_t, str_c)
+    print(g_whitelist)
+    print("^ before saving")
+    save_whitelist()
+    print("Saved whitelist")
+        
+    print("Testing load_whitelist()")
+    load_whitelist()
+    print(g_whitelist)
+
 # % GOOD
 # i.e. www.facebook.com/thisisanexample/... -> facebook.com
 def extract_domains(domains: list):
@@ -238,9 +255,10 @@ def main():
         run(site)
     
 
-    save_whitelist()
+    ()
 
 if __name__ == "__main__":
     # main()
-    load_phishing_sites()
+    # load_phishing_sites()
+    test_whitelist()
     # dns_lookup('facebook.com')
