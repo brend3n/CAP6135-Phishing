@@ -147,12 +147,14 @@ def calculate_hyperlink(url: str):
         num_links=num_links+1
     return link_set, num_links
 
+# ! TEST
 def is_self_referencing(url: str, page_domain: str):
-    print(f"url: {url} \t domain: {page_domain}")
+    print(f"url: {url} \t domain: {page_domain}\n")
     if len(url) > 0 and url[0] == "/": return True              # Link to a page on the site (file structure)
     elif page_domain.replace("www.", "") in url: return True    # Link has the same domain
     elif len(url) > 1 and url[0] == "#": return True            # ie. #head -> Scrolling link to certain html-ID is self-referencing on the page -> automatic scrolling on page
 
+    print("Not self referencing\n\n")
     return False
 
 # ! TEST
@@ -161,7 +163,7 @@ def get_self_ref_links(url: str):
     
     url_p=urlparse(url)
     domain = url_p.netloc
-    print(f"url: {url}\tdomain: {domain}")
+    print(f"page url: {url}\tpage domain: {domain}")
     
     resp=requests.get(url)
     soup=bs(resp.text,'html.parser')
@@ -169,7 +171,6 @@ def get_self_ref_links(url: str):
     
     for link in soup.find_all('a'):
         temp=link.get('href')
-        print(temp)
         if is_self_referencing(temp, domain):
             num_links=num_links+1
     return num_links
@@ -194,7 +195,7 @@ def test_extraction_functions():
     print(f"Results:\n Number of self referencing links: {num_self_ref_links}")
     print(f"Testing: get_percentage_null_hyperlinks() with URL: {link}")
     ret_val = get_percentage_null_hyperlinks(link_set)
-    print(f"Results: %/ null links: {ret_val}")
+    print(f"Results: % null links: {ret_val}")
 
 
 # % GOOD
