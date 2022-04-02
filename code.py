@@ -295,10 +295,11 @@ def main():
     load_phishing_sites()
     
     for site in g_phishing_sites:
+        print(f"Running: {site}")
         try:
             run(site)
         except Exception as e:
-            print(f"Exception caught: {e}")
+            # print(f"Exception caught: {e}")
             continue
         
     analyze_results()
