@@ -12,6 +12,7 @@ Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
 """
 g_whitelist = {}
 g_phishing_sites = []
+domains = []
 num_urls = 0
 g_threshold = 1010
 
@@ -19,6 +20,7 @@ g_threshold = 1010
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
 def load_phishing_sites():
     global g_phishing_sites
+    global domains
     content = None
     option = int(input("Enter: \n1. Phishing Repo\n2. PhishTank (data from paper)\n"))
     if option == 1:
