@@ -161,12 +161,12 @@ def get_self_ref_links(url: str):
           num_links=num_links+1
     return num_links
 
-# ! TEST
+# % GOOD
 # Get percentage of "#" hyperlinks in link set
 def get_percentage_null_hyperlinks(link_set):
   num_links=0
   for link in link_set:
-    if(link == "#"):
+    if(link == "#"):    # NULL link  = "#"
       num_links=num_links+1
   return ((num_links / len(link_set)) * 100)
 
@@ -182,16 +182,13 @@ def test_extraction_functions():
     print(f"Testing: get_percentage_null_hyperlinks() with URL: {link}")
     ret_val = get_percentage_null_hyperlinks(link_set)
     print(f"Results: %/ null links: {ret_val}")
-    
-    
-    
-    
+
 
 #! TODO: Not Tested
 # This should be done since this is directly from the paper
 # Ratio of hyperlinks points to foreign domains / total numer of hyperlinks
 # ratio = [1 - (count_self_ref_links / num_hyperlinks)]
-def calc_ratio(webpage: str, hyperlinks_set, num_hyperlinks: int, count_self_ref_links: int):
+def calc_ratio(num_hyperlinks: int, count_self_ref_links: int):
     ratio = 1 - (count_self_ref_links / num_hyperlinks)
     return ratio
 
@@ -222,7 +219,7 @@ def phishing_identification_algo(webpage: str):
     count_self_ref_links = get_self_ref_links(webpage)
 
     # TODO: This function relies on the results of the other two functions
-    ratio = calc_ratio(webpage, hyperlinks_set, num_hyperlinks, count_self_ref_links)
+    ratio = calc_ratio(num_hyperlinks, count_self_ref_links)
 
     if ratio > g_threshold:
         print("Webpage is Phishing")
