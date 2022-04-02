@@ -50,16 +50,16 @@ def load_phishing_sites():
                 g_phishing_sites, num_urls = get_urls_from_json(content)
                 print("URLs:")
                 domains = extract_domains(g_phishing_sites)     # Takes out only the domain name from each site
-                # [print(url) for url in domains]
-                print(f'Number of urls: {num_urls}')
+                # # [print(url) for url in domains]
+                # print(f'Number of urls: {num_urls}')
                 
-                for i in range(len(g_phishing_sites)):
-                    print(f"~~~~~~~\nurl: {g_phishing_sites[i]}\ndomain: {domains[i]}\n~~~~~~~")
+                # for i in range(len(g_phishing_sites)):
+                #     print(f"~~~~~~~\nurl: {g_phishing_sites[i]}\ndomain: {domains[i]}\n~~~~~~~")
                 
-                len_g_p_sites = len(g_phishing_sites)
-                len_domains = len(domains)
-                print(f"Length of g_phishing_sites: {len_g_p_sites}")
-                print(f"Length of domains: {len_domains}")
+                # len_g_p_sites = len(g_phishing_sites)
+                # len_domains = len(domains)
+                # print(f"Length of g_phishing_sites: {len_g_p_sites}")
+                # print(f"Length of domains: {len_domains}")
                 
 # % GOOD               
 # Grabs all of the urls from the json content from PhishTank dataset
@@ -125,11 +125,11 @@ def extract_domains(domains: list):
 # Do a DNS lookup
 # Return None if bad otherwise return IP
 def dns_lookup(url: str):
-    print(f"Name: {url}")
+    # print(f"Name: {url}")
     res = None
     try:
         res = socket.gethostbyname(url)
-        print(f"Host: {res}")
+        # print(f"Host: {res}")
         return res
     except Exception as e:
         return None
@@ -158,12 +158,12 @@ def calculate_hyperlink(url: str):
 
 # % GOOD -> Might do additional refining if other test cases arise
 def is_self_referencing(url: str, page_domain: str):
-    print(f"url: {url} \t domain: {page_domain}\n")
+    # print(f"url: {url} \t domain: {page_domain}\n")
     if len(url) > 0 and url[0] == "/": return True              # Link to a page on the site (file structure)
     elif page_domain.replace("www.", "") in url: return True    # Link has the same domain
     elif len(url) > 1 and url[0] == "#": return True            # ie. #head -> Scrolling link to certain html-ID is self-referencing on the page -> automatic scrolling on page
 
-    print("Not self referencing\n\n")
+    # print("Not self referencing\n\n")
     return False
 
 # % GOOD -> Seems good at the moment
@@ -172,7 +172,6 @@ def get_self_ref_links(url: str):
     
     url_p=urlparse(url)
     domain = url_p.netloc
-    print(f"page url: {url}\tpage domain: {domain}")
     
     resp=requests.get(url, timeout=5)
     soup=bs(resp.text,'html.parser')
@@ -226,14 +225,14 @@ def phishing_identification_algo(webpage: str):
     hyperlinks_set, num_hyperlinks = calculate_hyperlink(webpage)    
 
     if len(hyperlinks_set) == 0:
-        print("There are no hyperlinks extracted from webpage")
-        print("Webpage is Phishing")
+        # print("There are no hyperlinks extracted from webpage")
+        # print("Webpage is Phishing")
         return 0
 
     # Check for null hyperlinks
     # ? Paper says more than 80% of the hyperlinks are NULL then phishing
     if get_percentage_null_hyperlinks(hyperlinks_set) > 80.0:
-        print("Webpage is Phishing")
+        # print("Webpage is Phishing")
         return 0
     
     count_self_ref_links = get_self_ref_links(webpage)
@@ -242,13 +241,17 @@ def phishing_identification_algo(webpage: str):
     ratio = calc_ratio(num_hyperlinks, count_self_ref_links)
 
     if ratio > g_threshold:
-        print("Webpage is Phishing")
+        # print("Webpage is Phishing")
         return 0
     else:
-        print("Webpage is Legitimate")
+        # print("Webpage is Legitimate")
 
+        # Get domain and ip
+        domain = get_domain(webpage)
+        dns_res = dns_lookup(domain)
+        
         # Add valid domain to whitelist
-        update_whitelist()
+        update_whitelist(domain, dns_res)
         save_whitelist()
 
     return 1
@@ -271,10 +274,12 @@ def run(webpage: str):
         
         if ip_match(domain, dns_res): # IP matched
             # Legitimate page
-            print("Webpage is Legitimate")
+            # print("Webpage is Legitimate")
+            pass
         else: # IP Did not match
             # Phishing site
-            print("Webpage is Phishing")
+            # print("Webpage is Phishing")
+            pass
     else: # page not in whitelist
         ret_val = phishing_identification_algo(webpage)
         if ret_val != 0:
@@ -292,17 +297,30 @@ def analyze_results():
 def main():
     print("TODO: Add a timeout when making requests as not to hang for a long time on a get request that is not working")
     g_threshold = int(input("Adjust threshold: "))
-
+    
     init_whitelist()
     load_phishing_sites()
     
+    total_pages_processed = 0
+    total_failed = 0
+    
     for site in g_phishing_sites:
-        print(f"Running: {site}")
+        # print(f"Running: {site}")
+        total_pages_processed+=1
         try:
-            run(site)
+            res = run(site)
         except Exception as e:
+            # Uncomment to see the exception raised
             # print(f"Exception caught: {e}")
+            total_failed+=1
             continue
+        os.system('clear')
+        positionStr = 'Total pages processed: ' + str(total_pages_processed).rjust(5)
+        positionStr += '\nTotal Failed:          ' + str(total_failed).rjust(5)
+        positionStr += '\nTotal Legitimate:      ' + str(len(g_determined_legitimate)).rjust(5)
+        positionStr += '\nTotal Phishing:        ' + str(len(g_determined_phishing)).rjust(5)
+        print(positionStr, end='\n')
+        print('\b' * len(positionStr), end='', flush=True)
         
     analyze_results()
     

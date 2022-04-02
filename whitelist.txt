@@ -1,1 +1,1 @@
-{"aaaa": "b", "aa": "b", "aaaaa": "b", "aaa": "b", "a": "b"}
+{"lapinetajesolo.com": "54.36.140.59", "alahle.000webhostapp.com": "145.14.145.236", "bit.do": "54.83.52.76", "bellswmailsonlineserlogs-0mailssseejdyese.weebly.com": "199.34.228.54", "hotmail-106024.weeblysite.com": "199.34.228.96", "btinternetmails106977.weeblysite.com": "199.34.228.97", "sbcglobalattupdate.weebly.com": "199.34.228.53"}
