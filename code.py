@@ -289,6 +289,7 @@ def analyze_results():
     print("Analyzing the results.")
     
 def main():
+    print("TODO: Add a timeout when making requests as not to hang for a long time on a get request that is not working")
     g_threshold = int(input("Adjust threshold: "))
 
     init_whitelist()
