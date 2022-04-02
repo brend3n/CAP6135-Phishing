@@ -151,12 +151,14 @@ def calculate_hyperlink(url: str):
 # Count number of hyperlinks pointing to own domain
 def get_self_ref_links(url: str):
     url_p=urlparse(url)
-    domain='{uri.scheme}://{uri.netloc}/'.format(uri=url_p)
+    domain = url_p.netloc
+    print(f"domain: {domain}")
     resp=requests.get(url)
     soup=bs(resp.text,'html.parser')
     num_links=0
     for link in soup.find_all('a'):
         temp=link.get('href')
+        print(temp)
         if temp is not None and domain in temp: # TODO: I think the None has to be a #, but im not sure
           num_links=num_links+1
     return num_links
@@ -184,7 +186,7 @@ def test_extraction_functions():
     print(f"Results: %/ null links: {ret_val}")
 
 
-#! TODO: Not Tested
+# % GOOD
 # This should be done since this is directly from the paper
 # Ratio of hyperlinks points to foreign domains / total numer of hyperlinks
 # ratio = [1 - (count_self_ref_links / num_hyperlinks)]
