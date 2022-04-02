@@ -130,9 +130,9 @@ def dns_lookup(url: str):
     except Exception as e:
         return None
 
-#! TODO: Write this function
-def is_match():
-    return
+# TODO: TEST
+def ip_match(domain: str, ip_to_match: str):
+    return True if g_whitelist[domain] == ip_to_match else False
 
 # % GOOD/
 # Extract the hyperlink set from the given webpage
@@ -208,7 +208,6 @@ def calc_ratio(num_hyperlinks: int, count_self_ref_links: int):
     return ratio
 
 # % Good: Structure conforms to Algorithm described in the paper
-# ! Bad: Need to ensure the functions are working as intended as described in paper
 # This is the algorithm defined in the paper. Check the README for the
 # link to the paper.
 # Returns 0 if page is phishing, otherwise returns 1
@@ -252,7 +251,8 @@ def run(webpage: str):
     This function should model the system described in the paper.
     """
 
-    if page in g_whitelist:
+    domain = get_domain(webpage)
+    if domain in g_whitelist:
         # Check if Domain Matched from DNS lookup
         '''
         If so:
@@ -263,7 +263,14 @@ def run(webpage: str):
         else Domain not matched:
             then call phishing_identifcation_module
         '''
-        pass
+        dns_res = dns_lookup(webpage)
+        
+        if ip_match(domain, dns_res): # IP matched
+            # Legitimate page
+            print("Webpage is Legitimate")
+        else: # IP Did not match
+            # Phishing site
+            print("Webpage is Phishing")
     else: # page not in whitelist
         ret_val = phishing_identification_algo(webpage)
         if ret_val != 0:
@@ -272,7 +279,6 @@ def run(webpage: str):
         else: 
             # phishing
             pass
-
     pass
 
 def main():
@@ -285,10 +291,9 @@ def main():
     for site in g_phishing_sites:
         run(site)
     
-
 if __name__ == "__main__":
     # main()
     # load_phishing_sites()
-    # test_whitelist()
+    # test_whitelist()l
     test_extraction_functions()
     # dns_lookup('facebook.com')
