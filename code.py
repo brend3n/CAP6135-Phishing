@@ -16,6 +16,7 @@ domains = []
 num_urls = 0
 g_threshold = 1010
 
+# % GOOD
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
 def load_phishing_sites():
