@@ -1,14 +1,14 @@
-import requests
-import os
+import requests # Making GET requests
+import os   
 import sys
-import json
-from dns import resolver    # DNS Lookup
+from dns import resolver # DNS Lookup
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urlparse
-import socket 
-import random        
-from alive_progress import alive_bar
-import threading
+import socket
+import json
+import random # Testing
+from alive_progress import alive_bar # Progress bar
+import threading # Multithreading for faster scanning
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
 """
@@ -82,7 +82,12 @@ def get_urls_from_json(content):
         # print(url)
         urls.append(url)
     return urls, len(urls)
-    
+
+# % GOOD
+# i.e. www.facebook.com/thisisanexample/... -> facebook.com
+def extract_domains(domains: list):
+    return [urlparse(site).netloc.replace("www.", "") for site in domains]
+
 # % GOOD
 # Loads the whitelist values into the script
 def load_whitelist():
@@ -127,10 +132,6 @@ def test_whitelist():
     load_whitelist()
     print(g_whitelist)
 
-# % GOOD
-# i.e. www.facebook.com/thisisanexample/... -> facebook.com
-def extract_domains(domains: list):
-    return [urlparse(site).netloc.replace("www.", "") for site in domains]
 
 #! TODO: Need to make sure that dns lookup is done correctly and aligns with what the authors intended
 #! Read up on DNS poisoning
