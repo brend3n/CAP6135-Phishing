@@ -156,6 +156,7 @@ def dns_lookup(url: str):
     except Exception as e:
         return None
     """
+    # DNS resolve method from paper using dns.google from DNS translation
     url_to_search = url.replace("www.","")
     dns_query_string = f"https://dns.google/resolve?name={url_to_search}&type=A"
     response = requests.get(dns_query_string).json()
