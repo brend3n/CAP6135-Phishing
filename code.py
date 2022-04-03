@@ -142,6 +142,9 @@ def dns_lookup(url: str):
     url_to_search = url.replace("www.","")
     dns_query_string = f"https://dns.google/resolve?name={url_to_search}&type=A"
     response = requests.get(dns_query_string).json()
+    if "Answer" not in response:
+        print("Invalid Hostname")
+        return False
     dns_translation = response["Answer"][0]["data"]
     # print(f"Full Response:\n{response}")
     # print(f"IP Translation:\n {dns_translation}")
@@ -263,6 +266,10 @@ def phishing_identification_algo(webpage: str):
         domain = get_domain(webpage)
         dns_res = dns_lookup(domain)
         
+        # Couldn't resolve hostname so declare as phishing
+        if dns_res == False:
+            return 0
+        
         # Add valid domain to whitelist
         update_whitelist(domain, dns_res)
         save_whitelist()
@@ -272,6 +279,7 @@ def phishing_identification_algo(webpage: str):
 #! TODO: Need to implement phishing model for both modules
 # Module1: URL AND DNS MATCHING
 # Module2: PHISHING IDENTIFICATION
+# Returns 1 if Legitimate page, otherwise returns 0
 def run(webpage: str):
     
     """
@@ -285,22 +293,28 @@ def run(webpage: str):
         # Check if Domain Matched from DNS lookup
         dns_res = dns_lookup(webpage)
         
+        # Couldn't resolve hostname so declare as phishing
+        if dns_res == False:
+            return 0
+        
         if ip_match(domain, dns_res): # IP matched
             # Legitimate page
             # print("Webpage is Legitimate")
-            pass
+            return 1
         else: # IP Did not match
             # Phishing site
             # print("Webpage is Phishing")
-            pass
+            return 0
     else: # page not in whitelist
         ret_val = phishing_identification_algo(webpage)
         if ret_val != 0:
             # not phishing
             g_determined_legitimate.append(webpage)
+            return 1
         else: 
             # phishing
             g_determined_phishing.append(webpage)
+            return 0
     
 # ! TODO
 # Mirror the same analysis as found in the paper
@@ -397,8 +411,8 @@ def do_threading(sites, bar):
     analyze_results()
    
 if __name__ == "__main__":
-    main()
+    # main()
     # load_phishing_sites()
     # test_whitelist()l
     # test_extraction_functions()
-    # dns_lookup('facebook.com')
+    dns_lookup('facebwook.com')
