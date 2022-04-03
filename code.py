@@ -425,11 +425,13 @@ def launch_threads(prog_bar_obj, num_threads):
         
 
 def main():
-    res = int(input("Choose one of the following:\n1. Non-threading (regular)\n2. Threading\n"))
+    res = int(input("Choose one of the following:\n1. Non-threading (Not recommended)\n2. Threading (Do this)\n"))
     if res == 1:
         do_regular()
     else:
         g_threshold = int(input("Adjust threshold: "))
+        threads_max = 
+        print(f"Total number of threads you can choose: {threads_max}")
         num_threads = int(input("Enter number of threads to use: "))
 
         init_whitelist()
@@ -486,8 +488,6 @@ def do_threading(sites, bar):
             # Uncomment to see the exception raised
             # print(f"Exception caught: {e}")
             continue
-            
-    
    
 if __name__ == "__main__":
     main()
