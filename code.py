@@ -83,6 +83,7 @@ def load_phishing_sites():
                 # print(f"Length of g_phishing_sites: {len_g_p_sites}")
                 # print(f"Length of domains: {len_domains}")
 
+# % GOOD
 def scrape_valid_sites():
     with open("valid_sites.txt", "w") as f:
         content = requests.get("https://moz.com/top500")
@@ -92,7 +93,8 @@ def scrape_valid_sites():
             buff = f"{ele['href']}\n"
             # print(buff)
             f.write(buff)
-            
+
+# % GOOD
 def load_valid_sites():
     global g_valid_sites
     with open("valid_sites.txt", "r") as f:
@@ -100,7 +102,36 @@ def load_valid_sites():
         for line in lines:
             g_valid_sites.append(line[:-1])
     print(g_valid_sites)
-     
+
+# ! TODO
+def prepare_data_for_run():
+    """
+    There are valid sites and phishing sites. To get results that we can compare to the author's,
+    we need to run on both valid and phishing sites and update the metrics based on how this program
+    characterizes each site. To do this, we need some sort of data structure where we can add the site
+    and whether that site is phishing or not. Something like this:
+    
+    # Structure to represent a site
+    data_model ={
+            "site": url, 
+            "domain": domain, 
+            "phishing": boolean
+        }
+    
+    # Array of data_models for each site
+    test_data = [data_model]
+    
+    In the data model, we can include whether or not the site is phishing so we can determine
+    the metrics that are used in the paper.
+    
+    All of the functions that are passing around data will need to be slightly modified to take
+    care of this new structure. In fact, there will just be a refactoring of most of the code. But,
+    at least right now things are working well enough.    
+    """
+    
+    pass
+
+
 # % GOOD               
 # Grabs all of the urls from the json content from PhishTank dataset
 def get_urls_from_json(content):
@@ -358,6 +389,13 @@ def run(webpage: str):
 # Mirror the same analysis as found in the paper
 def analyze_results():
     print("Analyzing the results.")
+    print(f"True Positive Rate: {true_positive_rate}")
+    print(f"False Positive Rate: {false_positive_rate}")
+    print(f"False Negative Rate: {false_negative_rate}")
+    print(f"True Negative Rate: {true_negative_rate}")
+    print(f"Accuracy: {accuracy}")
+    
+    
 
 # Used for making chunks
 def chunkify(lst,n):
