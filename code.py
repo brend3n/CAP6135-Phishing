@@ -18,9 +18,17 @@ domains = []
 num_urls = 0
 g_threshold = 1010
 
-
 g_determined_phishing = []
 g_determined_legitimate = []
+
+# Metrics
+true_positive_rate = 1
+false_positive_rate = 1
+false_negative_rate = 1
+true_negative_rate = 1
+accuracy = 1
+
+
 
 # % GOOD
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
