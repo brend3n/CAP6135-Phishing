@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 import socket 
 import random        
 from alive_progress import alive_bar
+import threading
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
 """
@@ -296,15 +297,58 @@ def run(webpage: str):
 # Mirror the same analysis as found in the paper
 def analyze_results():
     print("Analyzing the results.")
+
+# Used for making chunks
+def chunkify(lst,n):
+    return [lst[i::n] for i in range(n)]
+
+# Use threads to speed up scanning
+def launch_threads(prog_bar_obj, num_threads):
+    # Divide chunks of webpages to each thread
+    chunks = chunkify(g_phishing_sites, num_threads)
+    threads = []
+    # Give each thread webpages
+    for i in range(num_threads):
+        t = threading.Thread(name=f"Thread {i}", target=do_threading, args=(chunks[i],prog_bar_obj,) )
+        t.setDaemon(True)
+        threads.append(t)
     
+    # Start threads
+    print(f"Starting {num_threads} threads.")
+    for i in range(num_threads):
+        threads[i].start()
+    
+    print(f"Joining {num_threads} threads.")
+    # Join threads
+    for i in range(num_threads):
+        threads[i].join()    
+
 def main():
+    res = int(input("Choose one of the following:\n1. Non-threading (regular)\n2. Threading\n"))
+    if res == 1:
+        do_regular()
+    else:
+        g_threshold = int(input("Adjust threshold: "))
+        num_threads = int(input("Enter number of threads to use: "))
+
+        init_whitelist()
+        load_phishing_sites()
+        total_pages_processed = 0
+        total_failed = 0    
+        print("Launching threads")  
+        with alive_bar(len(g_phishing_sites)) as bar:  
+            launch_threads(bar, num_threads)
+    
+def do_regular():
+    
     g_threshold = int(input("Adjust threshold: "))
     
     init_whitelist()
     load_phishing_sites()
     
     total_pages_processed = 0
-    total_failed = 0
+    total_failed = 0    
+    
     with alive_bar(len(g_phishing_sites)) as bar:
         for site in g_phishing_sites:
             # print(f"Running: {site}")
@@ -328,6 +372,21 @@ def main():
         
     analyze_results()
     
+    
+def do_threading(sites, bar):
+
+    for site in sites:
+        # print(f"Running: {site}")
+        bar()
+        try:
+            res = run(site)
+        except Exception as e:
+            # Uncomment to see the exception raised
+            # print(f"Exception caught: {e}")
+            continue
+            
+    analyze_results()
+   
 if __name__ == "__main__":
     main()
     # load_phishing_sites()
