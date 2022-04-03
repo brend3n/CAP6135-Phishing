@@ -18,6 +18,8 @@ g_whitelist = {}
 # Stores all sites from dataset
 g_phishing_sites = []
 
+g_valid_sites = []
+
 # Stores the domains for each site from dataset
 domains = []
 
@@ -80,7 +82,25 @@ def load_phishing_sites():
                 # len_domains = len(domains)
                 # print(f"Length of g_phishing_sites: {len_g_p_sites}")
                 # print(f"Length of domains: {len_domains}")
-                
+
+def scrape_valid_sites():
+    with open("valid_sites.txt", "w") as f:
+        content = requests.get("https://moz.com/top500")
+        soup = bs(content.text, "html.parser")
+        fun_dumpy = {}
+        for ele in soup.find_all('a', {'class':'ml-2'}):
+            buff = f"{ele['href']}\n"
+            # print(buff)
+            f.write(buff)
+            
+def load_valid_sites():
+    global g_valid_sites
+    with open("valid_sites.txt", "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            g_valid_sites.append(line[:-1])
+    print(g_valid_sites)
+     
 # % GOOD               
 # Grabs all of the urls from the json content from PhishTank dataset
 def get_urls_from_json(content):
@@ -376,6 +396,7 @@ def main():
 
         init_whitelist()
         load_phishing_sites()
+        load_valid_sites()
         total_pages_processed = 0
         total_failed = 0    
         print("Launching threads")  
@@ -388,6 +409,7 @@ def do_regular():
     
     init_whitelist()
     load_phishing_sites()
+    load_valid_sites()
     
     total_pages_processed = 0
     total_failed = 0    
@@ -436,3 +458,5 @@ if __name__ == "__main__":
     # test_whitelist()l
     # test_extraction_functions()
     # dns_lookup('facebwook.com')
+    # load_valid_sites()
+        
