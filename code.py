@@ -6,8 +6,8 @@ from dns import resolver    # DNS Lookup
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urlparse
 import socket 
-import random                   
-
+import random        
+from alive_progress import alive_bar
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
 """
@@ -42,8 +42,11 @@ def load_phishing_sites():
         option = int(input("Enter: \n1. Fetch data (Don't do this because API calls)\n2. Load data from test_data.json\n"))
         if option == 1:
             url = "http://data.phishtank.com/data/online-valid.json"
-            content = requests.get(url)
-            print(content)
+            # content = requests.get(url).text[0]
+            content = requests.get(url).json()
+            g_phishing_sites, num_urls = get_urls_from_json(content)
+            domains = extract_domains(g_phishing_sites)
+            
         else:
             with open("json_data/FULL.json", "r") as f:
                 content = json.load(f)
@@ -295,7 +298,6 @@ def analyze_results():
     print("Analyzing the results.")
     
 def main():
-    print("TODO: Add a timeout when making requests as not to hang for a long time on a get request that is not working")
     g_threshold = int(input("Adjust threshold: "))
     
     init_whitelist()
@@ -303,24 +305,26 @@ def main():
     
     total_pages_processed = 0
     total_failed = 0
-    
-    for site in g_phishing_sites:
-        # print(f"Running: {site}")
-        total_pages_processed+=1
-        try:
-            res = run(site)
-        except Exception as e:
-            # Uncomment to see the exception raised
-            # print(f"Exception caught: {e}")
-            total_failed+=1
-            continue
-        os.system('clear')
-        positionStr = 'Total pages processed: ' + str(total_pages_processed).rjust(5)
-        positionStr += '\nTotal Failed:          ' + str(total_failed).rjust(5)
-        positionStr += '\nTotal Legitimate:      ' + str(len(g_determined_legitimate)).rjust(5)
-        positionStr += '\nTotal Phishing:        ' + str(len(g_determined_phishing)).rjust(5)
-        print(positionStr, end='\n')
-        print('\b' * len(positionStr), end='', flush=True)
+    with alive_bar(len(g_phishing_sites)) as bar:
+        for site in g_phishing_sites:
+            # print(f"Running: {site}")
+            total_pages_processed+=1
+            bar()
+            try:
+                res = run(site)
+            except Exception as e:
+                # Uncomment to see the exception raised
+                # print(f"Exception caught: {e}")
+                total_failed+=1
+                continue
+            os.system('clear')
+            positionStr = 'Total pages processed: ' + str(total_pages_processed).rjust(5)
+            positionStr += '\nTotal Failed:          ' + str(total_failed).rjust(5)
+            positionStr += '\nTotal Legitimate:      ' + str(len(g_determined_legitimate)).rjust(5)
+            positionStr += '\nTotal Phishing:        ' + str(len(g_determined_phishing)).rjust(5)
+            print(positionStr, end='\n')
+            print('\b' * len(positionStr), end='', flush=True)
+            
         
     analyze_results()
     
