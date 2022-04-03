@@ -284,9 +284,8 @@ def phishing_identification_algo(webpage: str):
 
     return 1
 
-#! TODO: Need to implement phishing model for both modules
-# Module1: URL AND DNS MATCHING
-# Module2: PHISHING IDENTIFICATION
+# !! Need to modify this function to put if site is actually phishing or not for
+# !! updating the metrics. Also, have this function update the global metrics as well
 # Returns 1 if Legitimate page, otherwise returns 0
 def run(webpage: str):
     
@@ -325,6 +324,7 @@ def run(webpage: str):
             return 0
     
 # ! TODO
+# !! Need to use the metrics that are updated from the function above.
 # Mirror the same analysis as found in the paper
 def analyze_results():
     print("Analyzing the results.")
@@ -349,10 +349,12 @@ def launch_threads(prog_bar_obj, num_threads):
     for i in range(num_threads):
         threads[i].start()
     
-    print(f"Joining {num_threads} threads.")
     # Join threads
+    # ! If this is excluded, it breaks code
     for i in range(num_threads):
-        threads[i].join()    
+        threads[i].join()
+    
+        
 
 def main():
     res = int(input("Choose one of the following:\n1. Non-threading (regular)\n2. Threading\n"))
@@ -419,8 +421,8 @@ def do_threading(sites, bar):
     analyze_results()
    
 if __name__ == "__main__":
-    # main()
+    main()
     # load_phishing_sites()
     # test_whitelist()l
     # test_extraction_functions()
-    dns_lookup('facebwook.com')
+    # dns_lookup('facebwook.com')
