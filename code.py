@@ -441,6 +441,9 @@ def main():
         with alive_bar(len(g_phishing_sites)) as bar:  
             launch_threads(bar, num_threads)
     
+    analyze_results()
+
+# No threading here -> too slow
 def do_regular():
     
     g_threshold = int(input("Adjust threshold: "))
@@ -470,11 +473,7 @@ def do_regular():
             positionStr += '\nTotal Legitimate:      ' + str(len(g_determined_legitimate)).rjust(5)
             positionStr += '\nTotal Phishing:        ' + str(len(g_determined_phishing)).rjust(5)
             print(positionStr, end='\n')
-            print('\b' * len(positionStr), end='', flush=True)
-            
-        
-    analyze_results()
-    
+            print('\b' * len(positionStr), end='', flush=True)    
     
 def do_threading(sites, bar):
 
@@ -488,7 +487,7 @@ def do_threading(sites, bar):
             # print(f"Exception caught: {e}")
             continue
             
-    analyze_results()
+    
    
 if __name__ == "__main__":
     main()
