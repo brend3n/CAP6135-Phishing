@@ -129,7 +129,8 @@ def extract_domains(domains: list):
 # Do a DNS lookup
 # Return None if bad otherwise return IP
 def dns_lookup(url: str):
-    # print(f"Name: {url}")
+    # Old way might also change gethostbyname->getaddrinfo
+    """
     res = None
     try:
         res = socket.gethostbyname(url)
@@ -137,6 +138,14 @@ def dns_lookup(url: str):
         return res
     except Exception as e:
         return None
+    """
+    url_to_search = url.replace("www.","")
+    dns_query_string = f"https://dns.google/resolve?name={url_to_search}&type=A"
+    response = requests.get(dns_query_string).json()
+    dns_translation = response["Answer"][0]["data"]
+    # print(f"Full Response:\n{response}")
+    # print(f"IP Translation:\n {dns_translation}")
+    return dns_translation    
 
 # TODO: TEST
 def ip_match(domain: str, ip_to_match: str):
