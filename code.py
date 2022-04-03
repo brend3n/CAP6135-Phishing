@@ -9,15 +9,25 @@ import json
 import random # Testing
 from alive_progress import alive_bar # Progress bar
 import threading # Multithreading for faster scanning
+
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
 """
 g_whitelist = {}
+
+# Stores all sites from dataset
 g_phishing_sites = []
+
+# Stores the domains for each site from dataset
 domains = []
+
+# Count of urls
 num_urls = 0
+
+# Threshold value for phishing identification module from paper
 g_threshold = 1010
 
+# Sites that are determined to be safe or phishing
 g_determined_phishing = []
 g_determined_legitimate = []
 
@@ -27,8 +37,6 @@ false_positive_rate = 1
 false_negative_rate = 1
 true_negative_rate = 1
 accuracy = 1
-
-
 
 # % GOOD
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
