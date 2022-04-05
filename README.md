@@ -6,6 +6,12 @@ Run the following command in a fresh virtual environment
 
 `pip3 install -r requirements.txt`  
 
+To run the script:
+
+`python3 code.py`
+
+then, follow the prompts in the code.
+
 
 ### Paper
 Link:  https://jis-eurasipjournals.springeropen.com/articles/10.1186/s13635-016-0034-3
