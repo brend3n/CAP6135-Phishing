@@ -5,7 +5,7 @@ import json
 # Loads the whitelist values into the script
 def load_whitelist():
     # global g_whitelist
-    with open("whitelist.txt", "r") as f:
+    with open("./text_files/whitelist.txt", "r") as f:
        g_whitelist = json.load(f)
     
     return g_whitelist
@@ -24,7 +24,7 @@ def update_whitelist(domain: str, ip: str, g_whitelist: dict):
 # % GOOD
 # Save the current whitelist locally to whitelist.txt
 def save_whitelist(g_whitelist):
-    with open("whitelist.txt", "w") as f:
+    with open("./text_files/whitelist.txt", "w") as f:
         
         # Dump contents of dictionary to file as json object
         f.write(json.dumps(g_whitelist))
