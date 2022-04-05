@@ -17,7 +17,6 @@ g_whitelist = {}
 
 # Stores all sites from dataset
 g_phishing_sites = []
-
 g_valid_sites = []
 
 # Stores the domains for each site from dataset
@@ -128,8 +127,26 @@ def prepare_data_for_run():
     care of this new structure. In fact, there will just be a refactoring of most of the code. But,
     at least right now things are working well enough.    
     """
+    # Stores the new structure
+    test_data = []
     
-    pass
+    # Setting the phishing sites
+    for site in g_phishing_sites:
+        test_data.append({
+            "site":site,
+            "domain":get_domain(site).replace("www", ""),
+            "is_phishing": True
+        })
+    
+    # Setting the valid sites
+    for site in g_valid_sites:
+        test_data.append({
+            "site":site,
+            "domain":get_domain(site).replace("www", ""),
+            "is_phishing": False
+        })
+    
+    return test_data
 
 
 # % GOOD               
@@ -430,7 +447,7 @@ def main():
         do_regular()
     else:
         g_threshold = int(input("Adjust threshold: "))
-        threads_max = 
+        threads_max = os.
         print(f"Total number of threads you can choose: {threads_max}")
         num_threads = int(input("Enter number of threads to use: "))
 
