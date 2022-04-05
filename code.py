@@ -9,6 +9,7 @@ import json
 import random # Testing
 from alive_progress import alive_bar # Progress bar
 import threading # Multithreading for faster scanning
+from whitelist import load_whitelist, init_whitelist, update_whitelist, save_whitelist
 
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
@@ -38,6 +39,8 @@ false_positive_rate = 1
 false_negative_rate = 1
 true_negative_rate = 1
 accuracy = 1
+total_pages_processed = 0
+total_failed = 0 
 
 # % GOOD
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
@@ -102,7 +105,7 @@ def load_valid_sites():
             g_valid_sites.append(line[:-1])
     print(g_valid_sites)
 
-# ! TODO
+# ! TEST
 def prepare_data_for_run():
     """
     There are valid sites and phishing sites. To get results that we can compare to the author's,
@@ -164,49 +167,49 @@ def get_urls_from_json(content):
 def extract_domains(domains: list):
     return [urlparse(site).netloc.replace("www.", "") for site in domains]
 
-# % GOOD
-# Loads the whitelist values into the script
-def load_whitelist():
-    global g_whitelist
-    with open("whitelist.txt", "r") as f:
-       g_whitelist = json.load(f)
+# # % GOOD
+# # Loads the whitelist values into the script
+# def load_whitelist():
+#     global g_whitelist
+#     with open("whitelist.txt", "r") as f:
+#        g_whitelist = json.load(f)
 
-# % GOOD
-# Initializes an empty dictionary
-def init_whitelist():
-    g_whitelist = {}
+# # % GOOD
+# # Initializes an empty dictionary
+# def init_whitelist():
+#     g_whitelist = {}
 
-# % GOOD
-# Adds a new key-value pair to the whitelist
-def update_whitelist(domain: str, ip: str):
-    g_whitelist[domain] = ip
+# # % GOOD
+# # Adds a new key-value pair to the whitelist
+# def update_whitelist(domain: str, ip: str):
+#     g_whitelist[domain] = ip
 
-# % GOOD
-# Save the current whitelist locally to whitelist.txt
-def save_whitelist():
-    with open("whitelist.txt", "w") as f:
+# # % GOOD
+# # Save the current whitelist locally to whitelist.txt
+# def save_whitelist():
+#     with open("whitelist.txt", "w") as f:
         
-        # Dump contents of dictionary to file as json object
-        f.write(json.dumps(g_whitelist))
+#         # Dump contents of dictionary to file as json object
+#         f.write(json.dumps(g_whitelist))
 
-# % GOOD
-def test_whitelist():
-    num_entries = int(input("How many entries: "))
-    print(f"num_entries: {num_entries}")
-    init_whitelist()
-    for i in range(num_entries):
-        print(i)
-        str_t = "a"*random.randint(1,5)
-        str_c = "b"*random.randint(1,5)
-        update_whitelist(str_t, str_c)
-    print(g_whitelist)
-    print("^ before saving")
-    save_whitelist()
-    print("Saved whitelist")
+# # % GOOD
+# def test_whitelist():
+#     num_entries = int(input("How many entries: "))
+#     print(f"num_entries: {num_entries}")
+#     init_whitelist()
+#     for i in range(num_entries):
+#         print(i)
+#         str_t = "a"*random.randint(1,5)
+#         str_c = "b"*random.randint(1,5)
+#         update_whitelist(str_t, str_c)
+#     print(g_whitelist)
+#     print("^ before saving")
+#     save_whitelist()
+#     print("Saved whitelist")
         
-    print("Testing load_whitelist()")
-    load_whitelist()
-    print(g_whitelist)
+#     print("Testing load_whitelist()")
+#     load_whitelist()
+#     print(g_whitelist)
 
 
 #! TODO: Need to make sure that dns lookup is done correctly and aligns with what the authors intended
@@ -322,7 +325,9 @@ def calc_ratio(num_hyperlinks: int, count_self_ref_links: int):
 # link to the paper.
 # Returns 0 if page is phishing, otherwise returns 1
 def phishing_identification_algo(webpage: str):
-
+    
+    global g_whitelist
+    
     # Extract hyperlink data and number of hyperlinks on a given page
     hyperlinks_set, num_hyperlinks = calculate_hyperlink(webpage)    
 
@@ -357,8 +362,8 @@ def phishing_identification_algo(webpage: str):
             return 0
         
         # Add valid domain to whitelist
-        update_whitelist(domain, dns_res)
-        save_whitelist()
+        update_whitelist(domain, dns_res, g_whitelist)
+        save_whitelist(g_whitelist)
 
     return 1
 
@@ -420,9 +425,13 @@ def chunkify(lst,n):
 
 # Use threads to speed up scanning
 def launch_threads(prog_bar_obj, num_threads):
+    
     # Divide chunks of webpages to each thread
     chunks = chunkify(g_phishing_sites, num_threads)
+    
+    # Holds the Thread objects
     threads = []
+    
     # Give each thread webpages
     for i in range(num_threads):
         t = threading.Thread(name=f"Thread {i}", target=do_threading, args=(chunks[i],prog_bar_obj,) )
@@ -442,20 +451,32 @@ def launch_threads(prog_bar_obj, num_threads):
         
 
 def main():
+    global g_whitelist
+    global g_threshold
+    global total_pages_processed
+    global total_failed
+    
     res = int(input("Choose one of the following:\n1. Non-threading (Not recommended)\n2. Threading (Do this)\n"))
     if res == 1:
         do_regular()
     else:
+        # Need to pass threshold 
         g_threshold = int(input("Adjust threshold: "))
-        threads_max = os.
-        print(f"Total number of threads you can choose: {threads_max}")
         num_threads = int(input("Enter number of threads to use: "))
 
-        init_whitelist()
+        # Init whitelist as empty
+        g_whitelist = init_whitelist()
+        
+        # Load in the site data for testing
         load_phishing_sites()
         load_valid_sites()
+        
+        # ! TODO
+        # Need to implement these for additional metrics
+        # I already made them global but just need to update them when necessary
         total_pages_processed = 0
         total_failed = 0    
+        
         print("Launching threads")  
         with alive_bar(len(g_phishing_sites)) as bar:  
             launch_threads(bar, num_threads)
