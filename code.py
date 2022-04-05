@@ -470,7 +470,8 @@ def do_regular():
             positionStr += '\nTotal Phishing:        ' + str(len(g_determined_phishing)).rjust(5)
             print(positionStr, end='\n')
             print('\b' * len(positionStr), end='', flush=True)    
-    
+   
+# This is used 
 def do_threading(sites, bar):
 
     for site in sites:
