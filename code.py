@@ -105,7 +105,11 @@ def load_valid_sites():
             g_valid_sites.append(line[:-1])
     print(g_valid_sites)
 
-# ! TEST
+
+# ! TODO
+# Still need to test this to make sure its good
+# Include this in the main code to run on. Also, change call to chunkify when this gets passed
+# to the threads
 def prepare_data_for_run():
     """
     There are valid sites and phishing sites. To get results that we can compare to the author's,
