@@ -450,11 +450,18 @@ def analyze_results():
     print(f"No. of webpages that contain no hyperlinks: {no_links_count_phishing}")
     print(f"No. of webpages that contain null links: {null_links_count_phishing}")
     print(f"No. of webpages pointing to a foreign domain(>= threshold): {over_threshold_count_phishing}")
-    
-    print(f"\nTotal Legitimate: {total_legit}")
+    print(f"Total Legitimate: {total_legit}")
     print(f"No. of webpages that contain no hyperlinks: {no_links_count_legit}")
     print(f"No. of webpages that contain null links: {null_links_count_legit}")
     print(f"No. of webpages pointing to a foreign domain(>= threshold): {over_threshold_count_legit}")
+    
+    
+    percent_phishing = 100 * (len(g_determined_phishing) / (total_legit + total_phishing))
+    percent_legit = 100 * (len(g_determined_legitimate) / (total_legit + total_phishing))
+    print("Compare to Table 2 in paper")
+    print(f"Threshold (%): {g_threshold}")
+    print(f"Phishing Webpages: {percent_phishing}")
+    print(f"Legitimate Webpages: {percent_legit}")
     
     
     return true_positive_rate,false_positive_rate,false_negative_rate,true_negative_rate,accuracy
