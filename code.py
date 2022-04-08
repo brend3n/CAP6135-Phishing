@@ -585,25 +585,25 @@ def assert_res(site, res):
     # Site is Phishing but model says its le
     if site["is_phishing"] == True and res == True:
         # % False Positive
-        print("False Positive")
+        # print("False Positive")
         false_positive_sum+=1
     # Site is Phishing and model says its phishing
     elif site["is_phishing"] == True and res == False:
         # % True Positive
-        print("True Positive")
+        # print("True Positive")
         true_positive_sum+=1
     # Site is Legit and model says its legit
     elif site["is_phishing"] == False and res == True:
         # % True Negative
-        print("True Negative")
+        # print("True Negative")
         true_negative_sum+=1
     # Site is Legit but model says its phishing
     elif site["is_phishing"] == False and res == False:
         # % False Negative
-        print("False Negative")
+        # print("False Negative")
         false_negative_sum+=1
     
-    print("HERE")
+    # print("HERE")
         
 # This is used 
 def do_threading(sites, bar):
