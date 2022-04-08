@@ -314,11 +314,6 @@ def phishing_identification_algo(webpage: str):
         no_links_count += 1
         return 0
 
-# no_links_count = 0
-# null_links_count = 0
-# over_threshold_count = 0
-
-
     # Check for null hyperlinks
     # ? Paper says more than 80% of the hyperlinks are NULL then phishing
     if get_percentage_null_hyperlinks(hyperlinks_set) > 80.0:
