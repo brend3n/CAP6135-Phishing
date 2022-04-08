@@ -39,6 +39,8 @@ false_positive_sum = 0
 false_negative_sum = 0
 true_negative_sum = 0
 
+# Used for Table 3 of the paper for comparisons
+over_threshold_count = 0
 total_pages_processed = 0
 total_failed = 0 
 
@@ -287,6 +289,8 @@ def calc_ratio(num_hyperlinks: int, count_self_ref_links: int):
 def phishing_identification_algo(webpage: str):
     
     global g_whitelist
+    global over_threshold_count
+    global no_links_count
     
     # Extract hyperlink data and number of hyperlinks on a given page
     hyperlinks_set, num_hyperlinks = calculate_hyperlink(webpage)    
@@ -294,6 +298,7 @@ def phishing_identification_algo(webpage: str):
     if len(hyperlinks_set) == 0:
         # print("There are no hyperlinks extracted from webpage")
         # print("Webpage is Phishing")
+        no_links_count += 1
         return 0
 
     # Check for null hyperlinks
@@ -309,6 +314,7 @@ def phishing_identification_algo(webpage: str):
 
     if ratio > g_threshold:
         # print("Webpage is Phishing")
+        over_threshold_count += 1
         return 0
     else:
         # print("Webpage is Legitimate")
