@@ -346,7 +346,7 @@ def phishing_identification_algo(webpage):
         # print("Webpage is Phishing")
         is_phishing = True
     
-    count_self_ref_links = get_self_ref_links(webpage)
+    count_self_ref_links = get_self_ref_links(webpage["site"])
 
     # ? This function relies on the results of the other two functions
     ratio = calc_ratio(num_hyperlinks, count_self_ref_links)
@@ -364,7 +364,8 @@ def phishing_identification_algo(webpage):
         # print("Webpage is Legitimate")
 
         # Get domain and ip
-        domain = get_domain(webpage)
+        # domain = get_domain(webpage["site"])
+        domain = webpage["domain"]
         dns_res = dns_lookup(domain)
         
         # Couldn't resolve hostname so declare as phishing
@@ -381,9 +382,8 @@ def phishing_identification_algo(webpage):
     else:
         return 1
 
-# !! Need to modify this function to put if site is actually phishing or not for
-# !! updating the metrics. Also, have this function update the global metrics as well
-# Returns 1 if Legitimate page, otherwise returns 0
+
+# Returns True if Legitimate page, otherwise returns False
 def run(webpage):
     
     global g_determined_legitimate
@@ -472,6 +472,9 @@ def analyze_results():
         print(f"Threshold (%): {g_threshold}")
         print(f"Phishing Webpages: {percent_phishing}")
         print(f"Legitimate Webpages: {percent_legit}")
+        
+        print(f"Total pages failed to run: {total_pages_processed}")
+        print(f"Total pages that ran succesfully: {total_failed}")
     
     
     
@@ -530,13 +533,7 @@ def main():
         load_valid_sites()
         
         # Pack data for testing
-        test_data = prepare_data_for_run()
-        
-        # ! TODO
-        # Need to implement these for additional metrics
-        # I already made them global but just need to update them when necessary
-        total_pages_processed = 0
-        total_failed = 0    
+        test_data = prepare_data_for_run()  
         
         print("Launching threads")  
         with alive_bar(len(test_data)) as bar:  
@@ -610,6 +607,8 @@ def assert_res(site, res):
         
 # This is used 
 def do_threading(sites, bar):
+    global total_pages_processed
+    global total_failed
 
     for site in sites:
         # print(f"Running: {site}")
@@ -621,7 +620,9 @@ def do_threading(sites, bar):
         except Exception as e:
             # Uncomment to see the exception raised
             # print(f"Exception caught: {e}")
+            total_failed += 1
             continue
+        total_pages_processed += 1
    
 if __name__ == "__main__":
     main()
