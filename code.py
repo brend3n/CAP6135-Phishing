@@ -34,11 +34,11 @@ g_determined_phishing = []
 g_determined_legitimate = []
 
 # Metrics
-true_positive_rate = 1
-false_positive_rate = 1
-false_negative_rate = 1
-true_negative_rate = 1
-accuracy = 1
+true_positive_sum = 0
+false_positive_sum = 0
+false_negative_sum = 0
+true_negative_sum = 0
+
 total_pages_processed = 0
 total_failed = 0 
 
@@ -103,7 +103,7 @@ def load_valid_sites():
         lines = f.readlines()
         for line in lines:
             g_valid_sites.append(line[:-1])
-    print(g_valid_sites)
+    # print(g_valid_sites)
 
 
 # ! TODO
@@ -346,37 +346,46 @@ def run(webpage):
         
         # Couldn't resolve hostname so declare as phishing
         if dns_res == False:
-            return 0
+            return False
         
         if ip_match(domain, dns_res): # IP matched
             # Legitimate page
             # print("Webpage is Legitimate")
-            return 1
+            return True
         else: # IP Did not match
             # Phishing site
             # print("Webpage is Phishing")
-            return 0
+            return False
     else: # page not in whitelist
         ret_val = phishing_identification_algo(webpage["site"])
         if ret_val != 0:
             # not phishing
             g_determined_legitimate.append(webpage["site"])
-            return 1
+            return True
         else: 
             # phishing
             g_determined_phishing.append(webpage["site"])
-            return 0
-    
-# ! TODO
-# !! Need to use the metrics that are updated from the function above.
+            return False
+
+# ! TEST
 # Mirror the same analysis as found in the paper
 def analyze_results():
+    total_legit = len(g_valid_sites)
+    total_phishing = len(g_phishing_sites)
+    
+    true_positive_rate = (true_positive_sum / total_phishing) * 100
+    false_positive_rate = (false_positive_sum / total_phishing ) * 100
+    false_negative_rate = (false_negative_sum / total_legit) * 100
+    true_negative_rate = (true_negative_sum / total_legit) * 100
+    accuracy = ((true_negative_sum + true_positive_sum) / (total_legit + total_failed)) * 100
     print("Analyzing the results.")
     print(f"True Positive Rate: {true_positive_rate}")
     print(f"False Positive Rate: {false_positive_rate}")
     print(f"False Negative Rate: {false_negative_rate}")
     print(f"True Negative Rate: {true_negative_rate}")
     print(f"Accuracy: {accuracy}")
+    
+    return true_positive_rate,false_positive_rate,false_negative_rate,true_negative_rate,accuracy
     
     
 
@@ -479,6 +488,31 @@ def do_regular():
             print(positionStr, end='\n')
             print('\b' * len(positionStr), end='', flush=True)    
    
+# res will be False if it is phishing, otherwise its True
+def assert_res(site, res):
+    
+    global true_positive_sum
+    global false_positive_sum 
+    global false_negative_sum
+    global true_negative_sum
+    
+    # Site is Phishing but model says its le
+    if site["phishing"] == True and res == True:
+        # % False Positive
+        false_positive_sum+=1
+    # Site is Phishing and model says its phishing
+    elif site["phishing"] == True and res == False:
+        # % True Positive
+        true_positive_sum+=1
+    # Site is Legit and model says its legit
+    elif site["phishing"] == False and res == True:
+        # % True Negative
+        true_negative_sum+=1
+    # Site is Legit but model says its phishing
+    elif site["phishing"] == False and res == False:
+        # % False Negative
+        false_negative_sum+=1
+        
 # This is used 
 def do_threading(sites, bar):
 
@@ -487,6 +521,8 @@ def do_threading(sites, bar):
         bar()
         try:
             res = run(site)
+            
+            assert_res(site, res)
         except Exception as e:
             # Uncomment to see the exception raised
             # print(f"Exception caught: {e}")
