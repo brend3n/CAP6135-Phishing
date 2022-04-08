@@ -40,9 +40,13 @@ false_negative_sum = 0
 true_negative_sum = 0
 
 # Used for Table 3 of the paper for comparisons
-no_links_count = 0
-null_links_count = 0
-over_threshold_count = 0
+no_links_count_legit = 0
+null_links_count_legit = 0
+over_threshold_count_legit = 0
+
+no_links_count_phishing = 0
+null_links_count_phishing = 0
+over_threshold_count_phishing = 0
 
 total_pages_processed = 0
 total_failed = 0 
@@ -263,12 +267,8 @@ def get_percentage_null_hyperlinks(link_set):
     for link in link_set:
         if(link == "#"):    # NULL link  = "#"
             num_links=num_links+1
-            
-    # METRIC: Page contains at least one null link
-    if num_links > 0:
-        null_links_count+=1
         
-    return ((num_links / len(link_set)) * 100)
+    return ((num_links / len(link_set)) * 100), num_links
 
 # % GOOD
 # Test to see if all the link extraction functions are working as described from the paper
@@ -300,26 +300,47 @@ def calc_ratio(num_hyperlinks: int, count_self_ref_links: int):
 def phishing_identification_algo(webpage: str):
     
     global g_whitelist
-    global over_threshold_count
-    global no_links_count
-    global null_links_count
+    
+    global over_threshold_count_legit
+    global no_links_count_legit
+    global null_links_count_legit
+    
+    global over_threshold_count_phishing
+    global no_links_count_phishing
+    global null_links_count_phishing
+    
+    # Flag if a page is phishing
+    is_phishing = False
     
     # Extract hyperlink data and number of hyperlinks on a given page
-    hyperlinks_set, num_hyperlinks = calculate_hyperlink(webpage)    
+    hyperlinks_set, num_hyperlinks = calculate_hyperlink(webpage["site"])    
 
     # No hyperlinks on webpage
     if len(hyperlinks_set) == 0:
         # print("There are no hyperlinks extracted from webpage")
         # print("Webpage is Phishing")
-        no_links_count += 1
-        return 0
+    
+        if webpage["phishing"] == True:
+            no_links_count_phishing += 1
+        else:
+            no_links_count_legit += 1
+            
+        is_phishing = True
 
     # Check for null hyperlinks
     # ? Paper says more than 80% of the hyperlinks are NULL then phishing
-    if get_percentage_null_hyperlinks(hyperlinks_set) > 80.0:
+    ret_val, ret_num_links = get_percentage_null_hyperlinks(hyperlinks_set)
+    
+    # Page contains at least one null link
+    if ret_num_links > 0:
+        if webpage["phishing"] == True:
+            null_links_count_phishing += 1
+        else:
+            null_links_count_legit += 1
+        
+    if ret_val > 80.0:
         # print("Webpage is Phishing")
-        over_threshold_count += 1
-        return 0
+        is_phishing = True
     
     count_self_ref_links = get_self_ref_links(webpage)
 
@@ -328,8 +349,13 @@ def phishing_identification_algo(webpage: str):
 
     if ratio > g_threshold:
         # print("Webpage is Phishing")
-        over_threshold_count += 1
-        return 0
+        
+        if webpage["phishing"] == True:
+            over_threshold_count_phishing += 1
+        else:
+            over_threshold_count_legit += 1
+            
+        is_phishing = True
     else:
         # print("Webpage is Legitimate")
 
@@ -344,8 +370,12 @@ def phishing_identification_algo(webpage: str):
         # Add valid domain to whitelist
         update_whitelist(domain, dns_res, g_whitelist)
         save_whitelist(g_whitelist)
-
-    return 1
+        
+    
+    if is_phishing == True:
+        return 0
+    else:
+        return 1
 
 # !! Need to modify this function to put if site is actually phishing or not for
 # !! updating the metrics. Also, have this function update the global metrics as well
@@ -377,7 +407,7 @@ def run(webpage):
             # print("Webpage is Phishing")
             return False
     else: # page not in whitelist
-        ret_val = phishing_identification_algo(webpage["site"])
+        ret_val = phishing_identification_algo(webpage)
         if ret_val != 0:
             # not phishing
             g_determined_legitimate.append(webpage["site"])
@@ -389,6 +419,14 @@ def run(webpage):
 
 # Mirror the same analysis as found in the paper
 def analyze_results():
+    global over_threshold_count_legit
+    global no_links_count_legit
+    global null_links_count_legit
+    
+    global over_threshold_count_phishing
+    global no_links_count_phishing
+    global null_links_count_phishing
+    
     total_legit = len(g_valid_sites)
     total_phishing = len(g_phishing_sites)
     
@@ -403,6 +441,20 @@ def analyze_results():
     print(f"False Negative Rate: {false_negative_rate}")
     print(f"True Negative Rate: {true_negative_rate}")
     print(f"Accuracy: {accuracy}")
+    
+    tot_phish = len(g_phishing_sites)
+    tot_legit = len(g_valid_sites)
+    
+    print("Compare to Table 3 in paper")
+    print(f"Total Phishing: {tot_phish}")
+    print(f"No. of webpages that contain no hyperlinks: {no_links_count_phishing}")
+    print(f"No. of webpages that contain null links: {null_links_count_phishing}")
+    print(f"No. of webpages pointing to a foreign domain(>= threshold): {over_threshold_count_phishing}")
+    print(f"Total Legitimate: {tot_legit}")
+    print(f"No. of webpages that contain no hyperlinks: {no_links_count_legit}")
+    print(f"No. of webpages that contain null links: {null_links_count_legit}")
+    print(f"No. of webpages pointing to a foreign domain(>= threshold): {over_threshold_count_legit}")
+    
     
     return true_positive_rate,false_positive_rate,false_negative_rate,true_negative_rate,accuracy
     
