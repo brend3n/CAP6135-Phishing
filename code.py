@@ -431,6 +431,9 @@ def main():
         load_phishing_sites()
         load_valid_sites()
         
+        # Pack data for testing
+        test_data = prepare_data_for_run()
+        
         # ! TODO
         # Need to implement these for additional metrics
         # I already made them global but just need to update them when necessary
