@@ -330,7 +330,7 @@ def phishing_identification_algo(webpage: str):
 # !! Need to modify this function to put if site is actually phishing or not for
 # !! updating the metrics. Also, have this function update the global metrics as well
 # Returns 1 if Legitimate page, otherwise returns 0
-def run(webpage: str):
+def run(webpage):
     
     """
     This function should model the system described in the paper.
