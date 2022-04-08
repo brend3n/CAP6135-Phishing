@@ -297,7 +297,7 @@ def calc_ratio(num_hyperlinks: int, count_self_ref_links: int):
 # This is the algorithm defined in the paper. Check the README for the
 # link to the paper.
 # Returns 0 if page is phishing, otherwise returns 1
-def phishing_identification_algo(webpage: str):
+def phishing_identification_algo(webpage):
     
     global g_whitelist
     
@@ -320,7 +320,7 @@ def phishing_identification_algo(webpage: str):
         # print("There are no hyperlinks extracted from webpage")
         # print("Webpage is Phishing")
     
-        if webpage["phishing"] == True:
+        if webpage["is_phishing"] == True:
             no_links_count_phishing += 1
         else:
             no_links_count_legit += 1
@@ -333,7 +333,7 @@ def phishing_identification_algo(webpage: str):
     
     # Page contains at least one null link
     if ret_num_links > 0:
-        if webpage["phishing"] == True:
+        if webpage["is_phishing"] == True:
             null_links_count_phishing += 1
         else:
             null_links_count_legit += 1
@@ -350,7 +350,7 @@ def phishing_identification_algo(webpage: str):
     if ratio > g_threshold:
         # print("Webpage is Phishing")
         
-        if webpage["phishing"] == True:
+        if webpage["is_phishing"] == True:
             over_threshold_count_phishing += 1
         else:
             over_threshold_count_legit += 1
@@ -381,6 +381,9 @@ def phishing_identification_algo(webpage: str):
 # !! updating the metrics. Also, have this function update the global metrics as well
 # Returns 1 if Legitimate page, otherwise returns 0
 def run(webpage):
+    
+    global g_determined_legitimate
+    global g_determined_phishing
     
     """
     This function should model the system described in the paper.
@@ -419,13 +422,13 @@ def run(webpage):
 
 # Mirror the same analysis as found in the paper
 def analyze_results():
-    global over_threshold_count_legit
-    global no_links_count_legit
-    global null_links_count_legit
+    # global over_threshold_count_legit
+    # global no_links_count_legit
+    # global null_links_count_legit
     
-    global over_threshold_count_phishing
-    global no_links_count_phishing
-    global null_links_count_phishing
+    # global over_threshold_count_phishing
+    # global no_links_count_phishing
+    # global null_links_count_phishing
     
     total_legit = len(g_valid_sites)
     total_phishing = len(g_phishing_sites)
@@ -435,7 +438,8 @@ def analyze_results():
     false_negative_rate = (false_negative_sum / total_legit) * 100
     true_negative_rate = (true_negative_sum / total_legit) * 100
     accuracy = ((true_negative_sum + true_positive_sum) / (total_legit + total_failed)) * 100
-    print("Compare to Table 4 in paper")
+    
+    print("\nCompare to Table 4 in paper")
     print(f"Total Phishing: {total_phishing}")
     print(f"\nTotal Legitimate: {total_legit}")
     print(f"Phishing classified as Phishing: {true_positive_sum}\tTrue Positive Rate: {true_positive_rate}")
@@ -445,7 +449,7 @@ def analyze_results():
     print(f"Accuracy: {accuracy}")
     
     
-    print("Compare to Table 3 in paper")
+    print("\nCompare to Table 3 in paper")
     print(f"Total Phishing: {total_phishing}")
     print(f"No. of webpages that contain no hyperlinks: {no_links_count_phishing}")
     print(f"No. of webpages that contain null links: {null_links_count_phishing}")
@@ -458,7 +462,8 @@ def analyze_results():
     
     percent_phishing = 100 * (len(g_determined_phishing) / (total_legit + total_phishing))
     percent_legit = 100 * (len(g_determined_legitimate) / (total_legit + total_phishing))
-    print("Compare to Table 2 in paper")
+    
+    print("\nCompare to Table 2 in paper")
     print(f"Threshold (%): {g_threshold}")
     print(f"Phishing Webpages: {percent_phishing}")
     print(f"Legitimate Webpages: {percent_legit}")
@@ -577,19 +582,19 @@ def assert_res(site, res):
     global true_negative_sum
     
     # Site is Phishing but model says its le
-    if site["phishing"] == True and res == True:
+    if site["is_phishing"] == True and res == True:
         # % False Positive
         false_positive_sum+=1
     # Site is Phishing and model says its phishing
-    elif site["phishing"] == True and res == False:
+    elif site["is_phishing"] == True and res == False:
         # % True Positive
         true_positive_sum+=1
     # Site is Legit and model says its legit
-    elif site["phishing"] == False and res == True:
+    elif site["is_phishing"] == False and res == True:
         # % True Negative
         true_negative_sum+=1
     # Site is Legit but model says its phishing
-    elif site["phishing"] == False and res == False:
+    elif site["is_phishing"] == False and res == False:
         # % False Negative
         false_negative_sum+=1
         
