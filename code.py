@@ -384,10 +384,10 @@ def chunkify(lst,n):
     return [lst[i::n] for i in range(n)]
 
 # Use threads to speed up scanning
-def launch_threads(prog_bar_obj, num_threads):
+def launch_threads(prog_bar_obj, num_threads, test_data):
     
     # Divide chunks of webpages to each thread
-    chunks = chunkify(g_phishing_sites, num_threads)
+    chunks = chunkify(test_data, num_threads)
     
     # Holds the Thread objects
     threads = []
@@ -441,8 +441,8 @@ def main():
         total_failed = 0    
         
         print("Launching threads")  
-        with alive_bar(len(g_phishing_sites)) as bar:  
-            launch_threads(bar, num_threads)
+        with alive_bar(len(test_data)) as bar:  
+            launch_threads(bar, num_threads, test_data)
     
     analyze_results()
 
