@@ -399,7 +399,7 @@ def run(webpage):
     
     if domain in g_whitelist:
         # Check if Domain Matched from DNS lookup
-        dns_res = dns_lookup(webpage["site"])
+        dns_res = dns_lookup(domain)
         
         # Couldn't resolve hostname so declare as phishing
         if dns_res == False:
