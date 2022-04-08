@@ -267,8 +267,10 @@ def get_percentage_null_hyperlinks(link_set):
     for link in link_set:
         if(link == "#"):    # NULL link  = "#"
             num_links=num_links+1
-        
-    return ((num_links / len(link_set)) * 100), num_links
+    if len(link_set) > 0:
+        return ((num_links / len(link_set)) * 100), num_links
+    else:
+        return 0,0
 
 # % GOOD
 # Test to see if all the link extraction functions are working as described from the paper
@@ -290,8 +292,10 @@ def test_extraction_functions():
 # Ratio of hyperlinks points to foreign domains / total numer of hyperlinks
 # ratio = [1 - (count_self_ref_links / num_hyperlinks)]
 def calc_ratio(num_hyperlinks: int, count_self_ref_links: int):
-    ratio = 1 - (count_self_ref_links / num_hyperlinks)
-    return ratio
+    if num_hyperlinks > 0:
+        return (1 - (count_self_ref_links / num_hyperlinks))
+    else:
+        return 0
 
 # % Good: Structure conforms to Algorithm described in the paper
 # This is the algorithm defined in the paper. Check the README for the
@@ -584,25 +588,31 @@ def assert_res(site, res):
     # Site is Phishing but model says its le
     if site["is_phishing"] == True and res == True:
         # % False Positive
+        print("False Positive")
         false_positive_sum+=1
     # Site is Phishing and model says its phishing
     elif site["is_phishing"] == True and res == False:
         # % True Positive
+        print("True Positive")
         true_positive_sum+=1
     # Site is Legit and model says its legit
     elif site["is_phishing"] == False and res == True:
         # % True Negative
+        print("True Negative")
         true_negative_sum+=1
     # Site is Legit but model says its phishing
     elif site["is_phishing"] == False and res == False:
         # % False Negative
+        print("False Negative")
         false_negative_sum+=1
+    
+    print("HERE")
         
 # This is used 
 def do_threading(sites, bar):
 
     for site in sites:
-        # print(f"Running: {site}")
+        print(f"Running: {site}")
         bar()
         try:
             res = run(site)
@@ -610,7 +620,7 @@ def do_threading(sites, bar):
             assert_res(site, res)
         except Exception as e:
             # Uncomment to see the exception raised
-            # print(f"Exception caught: {e}")
+            print(f"Exception caught: {e}")
             continue
    
 if __name__ == "__main__":
