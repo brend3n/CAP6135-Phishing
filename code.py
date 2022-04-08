@@ -367,7 +367,6 @@ def run(webpage):
             g_determined_phishing.append(webpage["site"])
             return False
 
-# ! TEST
 # Mirror the same analysis as found in the paper
 def analyze_results():
     total_legit = len(g_valid_sites)
@@ -487,7 +486,8 @@ def do_regular():
             positionStr += '\nTotal Phishing:        ' + str(len(g_determined_phishing)).rjust(5)
             print(positionStr, end='\n')
             print('\b' * len(positionStr), end='', flush=True)    
-   
+
+# Check to see if site was classified correctly 
 # res will be False if it is phishing, otherwise its True
 def assert_res(site, res):
     
