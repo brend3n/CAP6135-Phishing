@@ -337,11 +337,12 @@ def run(webpage):
     """
 
     # Need to get domain from webpage to check if in whitelist
-    domain = get_domain(webpage).replace("www.", "")
+    # OLD: domain = get_domain(webpage).replace("www.", "")
+    domain = webpage["domain"]
     
     if domain in g_whitelist:
         # Check if Domain Matched from DNS lookup
-        dns_res = dns_lookup(webpage)
+        dns_res = dns_lookup(webpage["site"])
         
         # Couldn't resolve hostname so declare as phishing
         if dns_res == False:
@@ -356,14 +357,14 @@ def run(webpage):
             # print("Webpage is Phishing")
             return 0
     else: # page not in whitelist
-        ret_val = phishing_identification_algo(webpage)
+        ret_val = phishing_identification_algo(webpage["site"])
         if ret_val != 0:
             # not phishing
-            g_determined_legitimate.append(webpage)
+            g_determined_legitimate.append(webpage["site"])
             return 1
         else: 
             # phishing
-            g_determined_phishing.append(webpage)
+            g_determined_phishing.append(webpage["site"])
             return 0
     
 # ! TODO
