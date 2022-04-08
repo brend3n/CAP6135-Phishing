@@ -612,7 +612,7 @@ def assert_res(site, res):
 def do_threading(sites, bar):
 
     for site in sites:
-        print(f"Running: {site}")
+        # print(f"Running: {site}")
         bar()
         try:
             res = run(site)
@@ -620,7 +620,7 @@ def do_threading(sites, bar):
             assert_res(site, res)
         except Exception as e:
             # Uncomment to see the exception raised
-            print(f"Exception caught: {e}")
+            # print(f"Exception caught: {e}")
             continue
    
 if __name__ == "__main__":
