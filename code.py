@@ -40,7 +40,10 @@ false_negative_sum = 0
 true_negative_sum = 0
 
 # Used for Table 3 of the paper for comparisons
+no_links_count = 0
+null_links_count = 0
 over_threshold_count = 0
+
 total_pages_processed = 0
 total_failed = 0 
 
@@ -253,11 +256,19 @@ def get_self_ref_links(url: str):
 # % GOOD
 # Get percentage of "#" hyperlinks in link set
 def get_percentage_null_hyperlinks(link_set):
-  num_links=0
-  for link in link_set:
-    if(link == "#"):    # NULL link  = "#"
-      num_links=num_links+1
-  return ((num_links / len(link_set)) * 100)
+    
+    global null_links_count
+    
+    num_links=0
+    for link in link_set:
+        if(link == "#"):    # NULL link  = "#"
+            num_links=num_links+1
+            
+    # METRIC: Page contains at least one null link
+    if num_links > 0:
+        null_links_count+=1
+        
+    return ((num_links / len(link_set)) * 100)
 
 # % GOOD
 # Test to see if all the link extraction functions are working as described from the paper
@@ -291,20 +302,28 @@ def phishing_identification_algo(webpage: str):
     global g_whitelist
     global over_threshold_count
     global no_links_count
+    global null_links_count
     
     # Extract hyperlink data and number of hyperlinks on a given page
     hyperlinks_set, num_hyperlinks = calculate_hyperlink(webpage)    
 
+    # No hyperlinks on webpage
     if len(hyperlinks_set) == 0:
         # print("There are no hyperlinks extracted from webpage")
         # print("Webpage is Phishing")
         no_links_count += 1
         return 0
 
+# no_links_count = 0
+# null_links_count = 0
+# over_threshold_count = 0
+
+
     # Check for null hyperlinks
     # ? Paper says more than 80% of the hyperlinks are NULL then phishing
     if get_percentage_null_hyperlinks(hyperlinks_set) > 80.0:
         # print("Webpage is Phishing")
+        over_threshold_count += 1
         return 0
     
     count_self_ref_links = get_self_ref_links(webpage)
