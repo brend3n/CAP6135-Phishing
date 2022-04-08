@@ -74,6 +74,9 @@ def load_phishing_sites():
             url = "http://data.phishtank.com/data/online-valid.json"
             # content = requests.get(url).text[0]
             content = requests.get(url).json()
+            with open("json_data/FULL.json", "w") as f:
+                f.write(json.dumps(content))
+                print("Done writing new json data to file.")
             g_phishing_sites, num_urls = get_urls_from_json(content)
             domains = extract_domains(g_phishing_sites)
             
@@ -434,15 +437,15 @@ def analyze_results():
     # global no_links_count_phishing
     # global null_links_count_phishing
     
-    total_legit = len(g_valid_sites)
-    total_phishing = len(g_phishing_sites)
+    total_legit = len(g_determined_legitimate)
+    total_phishing = len(g_determined_phishing)
     
     if total_phishing > 0 and total_legit > 0:
         true_positive_rate = (true_positive_sum / total_phishing) * 100
         false_positive_rate = (false_positive_sum / total_phishing ) * 100
         false_negative_rate = (false_negative_sum / total_legit) * 100
         true_negative_rate = (true_negative_sum / total_legit) * 100
-        accuracy = ((true_negative_sum + true_positive_sum) / (total_legit + total_failed)) * 100
+        accuracy = ((true_negative_sum + true_positive_sum) / (total_pages_processed)) * 100
     
         print("\nCompare to Table 4 in paper")
         print(f"Total Phishing: {total_phishing}")
@@ -465,16 +468,16 @@ def analyze_results():
         print(f"No. of webpages pointing to a foreign domain(>= threshold): {over_threshold_count_legit}")
         
         
-        percent_phishing = 100 * (len(g_determined_phishing) / (total_legit + total_phishing))
-        percent_legit = 100 * (len(g_determined_legitimate) / (total_legit + total_phishing))
+        percent_phishing = 100 * (len(g_determined_phishing) / (total_pages_processed))
+        percent_legit = 100 * (len(g_determined_legitimate) / (total_pages_processed))
         
         print("\nCompare to Table 2 in paper")
         print(f"Threshold (%): {g_threshold}")
         print(f"Phishing Webpages: {percent_phishing}")
         print(f"Legitimate Webpages: {percent_legit}")
         
-        print(f"Total pages failed to run: {total_pages_processed}")
-        print(f"Total pages that ran succesfully: {total_failed}")
+        print(f"Total pages failed to run: {total_failed}")
+        print(f"Total pages that ran succesfully: {total_pages_processed}")
     
     
     
