@@ -512,8 +512,86 @@ def launch_threads(prog_bar_obj, num_threads, test_data):
     for i in range(num_threads):
         threads[i].join()
     
-        
+def reset_all_globals():
+    
+    global g_whitelist 
+    global g_phishing_sites 
+    global g_valid_sites 
+    global domains 
+    global num_urls
+    global g_threshold
+    global g_determined_phishing 
+    global g_determined_legitimate 
+    global true_positive_sum
+    global false_positive_sum
+    global false_negative_sum
+    global true_negative_sum
+    global no_links_count_legit
+    global null_links_count_legit
+    global over_threshold_count_legit
+    global no_links_count_phishing
+    global null_links_count_phishing
+    global over_threshold_count_phishing
+    global invalid_host_name_count
+    global total_pages_processed
+    global total_failed
+    
+    g_whitelist = {}
+    g_phishing_sites = []
+    g_valid_sites = []
+    domains = []
+    num_urls = 0
+    g_threshold = 1010
+    g_determined_phishing = []
+    g_determined_legitimate = []
+    true_positive_sum = 0
+    false_positive_sum = 0
+    false_negative_sum = 0
+    true_negative_sum = 0
+    no_links_count_legit = 0
+    null_links_count_legit = 0
+    over_threshold_count_legit = 0
+    no_links_count_phishing = 0
+    null_links_count_phishing = 0
+    over_threshold_count_phishing = 0
+    invalid_host_name_count = 0
+    total_pages_processed = 0
+    total_failed = 0
+             
+def run_all_thresholds():
+    global g_whitelist
+    global g_threshold
+    global total_pages_processed
+    global total_failed
+    
+    # Need to pass threshold 
+    num_threads = int(input("Enter number of threads to use: "))
 
+    thresholds = [10,20,30,36,40,50,60,70,80,90]
+    for threshold in thresholds:
+        # Resets all of the global variables
+        reset_all_globals()
+        
+        # Set the current threshold under test
+        g_threshold = threshold
+        print(f"\n\nTHRESHOLD: {g_threshold}\n\n")
+        
+        # Init whitelist as empty
+        g_whitelist = init_whitelist()
+        
+        # Load in the site data for testing
+        load_phishing_sites()
+        load_valid_sites()
+        
+        # Pack data for testing
+        test_data = prepare_data_for_run()  
+        
+        print("Launching threads")  
+        with alive_bar(len(test_data)) as bar:  
+            launch_threads(bar, num_threads, test_data)
+            
+        analyze_results()
+    
 def main():
     global g_whitelist
     global g_threshold
@@ -523,7 +601,7 @@ def main():
     res = int(input("Choose one of the following:\n1. Non-threading (Not recommended)\n2. Threading (Do this)\n"))
     if res == 1:
         do_regular()
-    else:
+    elif res == 2:
         # Need to pass threshold 
         g_threshold = int(input("Adjust threshold: "))
         num_threads = int(input("Enter number of threads to use: "))
@@ -541,7 +619,9 @@ def main():
         print("Launching threads")  
         with alive_bar(len(test_data)) as bar:  
             launch_threads(bar, num_threads, test_data)
-    
+    elif res == 3:
+        run_all_thresholds()
+        return
     analyze_results()
 
 # No threading here -> too slow
