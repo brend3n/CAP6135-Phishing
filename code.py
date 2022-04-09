@@ -300,9 +300,9 @@ def test_extraction_functions():
 # ratio = [1 - (count_self_ref_links / num_hyperlinks)]
 def calc_ratio(num_hyperlinks: int, count_self_ref_links: int):
     if num_hyperlinks > 0:
-        return (1 - (count_self_ref_links / num_hyperlinks))
+        return (1 - (count_self_ref_links / num_hyperlinks)) * 100
     else:
-        return 0
+        return 1 * 100
 
 # % Good: Structure conforms to Algorithm described in the paper
 # This is the algorithm defined in the paper. Check the README for the
