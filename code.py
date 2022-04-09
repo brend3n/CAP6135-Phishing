@@ -441,15 +441,17 @@ def analyze_results():
     total_phishing = len(g_determined_phishing)
     
     if total_phishing > 0 and total_legit > 0:
+        
         true_positive_rate = (true_positive_sum / total_phishing) * 100
         false_positive_rate = (false_positive_sum / total_phishing ) * 100
         false_negative_rate = (false_negative_sum / total_legit) * 100
         true_negative_rate = (true_negative_sum / total_legit) * 100
         accuracy = ((true_negative_sum + true_positive_sum) / (total_pages_processed)) * 100
     
-        print("\nCompare to Table 4 in paper")
+        print("\nCompare to Table 4 in paper\n")
         print(f"Total Phishing: {total_phishing}")
-        print(f"\nTotal Legitimate: {total_legit}")
+        print(f"Total Legitimate: {total_legit}\n")
+        
         print(f"Phishing classified as Phishing: {true_positive_sum}\tTrue Positive Rate: {true_positive_rate}")
         print(f"Phishing classified as Legitimate: {false_positive_sum}\tFalse Positive Rate: {false_positive_rate}")
         print(f"Legitimate classified as Phishing: {false_negative_sum}\tFalse Negative Rate: {false_negative_rate}")
@@ -457,7 +459,7 @@ def analyze_results():
         print(f"Accuracy: {accuracy}")
     
     
-        print("\nCompare to Table 3 in paper")
+        print("\nCompare to Table 3 in paper\n")
         print(f"Total Phishing: {total_phishing}")
         print(f"No. of webpages that contain no hyperlinks: {no_links_count_phishing}")
         print(f"No. of webpages that contain null links: {null_links_count_phishing}")
@@ -471,7 +473,7 @@ def analyze_results():
         percent_phishing = 100 * (len(g_determined_phishing) / (total_pages_processed))
         percent_legit = 100 * (len(g_determined_legitimate) / (total_pages_processed))
         
-        print("\nCompare to Table 2 in paper")
+        print("\nCompare to Table 2 in paper\n")
         print(f"Threshold (%): {g_threshold}")
         print(f"Phishing Webpages: {percent_phishing}")
         print(f"Legitimate Webpages: {percent_legit}")
