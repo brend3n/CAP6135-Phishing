@@ -410,15 +410,18 @@ def run(webpage):
         
         # Couldn't resolve hostname so declare as phishing
         if dns_res == False:
+            g_determined_phishing.append(webpage["site"])
             return False
         
         if ip_match(domain, dns_res): # IP matched
             # Legitimate page
             # print("Webpage is Legitimate")
+            g_determined_legitimate.append(webpage["site"])
             return True
         else: # IP Did not match
             # Phishing site
             # print("Webpage is Phishing")
+            g_determined_phishing.append(webpage["site"])
             return False
     else: # page not in whitelist
         ret_val = phishing_identification_algo(webpage)
