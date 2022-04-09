@@ -574,7 +574,6 @@ def run_all_thresholds():
         
         # Set the current threshold under test
         g_threshold = threshold
-        print(f"\n\nTHRESHOLD: {g_threshold}\n\n")
         
         # Init whitelist as empty
         g_whitelist = init_whitelist()
@@ -585,6 +584,7 @@ def run_all_thresholds():
         
         # Pack data for testing
         test_data = prepare_data_for_run()  
+        print(f"\n\nTHRESHOLD: {g_threshold}\n\n")
         
         print("Launching threads")  
         with alive_bar(len(test_data)) as bar:  
@@ -598,7 +598,7 @@ def main():
     global total_pages_processed
     global total_failed
     
-    res = int(input("Choose one of the following:\n1. Non-threading (Not recommended)\n2. Threading (Do this)\n"))
+    res = int(input("Choose one of the following:\n1. Non-threading (Not recommended)\n2. Threading (Do this)\n3. Run all thresholds (Threading)\n"))
     if res == 1:
         do_regular()
     elif res == 2:
@@ -620,6 +620,7 @@ def main():
         with alive_bar(len(test_data)) as bar:  
             launch_threads(bar, num_threads, test_data)
     elif res == 3:
+        print("Running all thresholds from paper.")
         run_all_thresholds()
         return
     analyze_results()
