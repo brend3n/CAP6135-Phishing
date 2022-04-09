@@ -48,6 +48,8 @@ no_links_count_phishing = 0
 null_links_count_phishing = 0
 over_threshold_count_phishing = 0
 
+invalid_host_name_count = 0
+
 total_pages_processed = 0
 total_failed = 0 
 
@@ -64,7 +66,7 @@ def load_phishing_sites():
         content = requests.get(url).iter_lines()
         for i in content:
             link = i.decode("utf-8")
-            print(link)
+            # print(link)
             g_phishing_sites.append(link)
         
         print("\nHere are the results. It is likely that some pages are not found because they were probably already taken down.")
@@ -84,7 +86,7 @@ def load_phishing_sites():
             with open("json_data/FULL.json", "r") as f:
                 content = json.load(f)
                 g_phishing_sites, num_urls = get_urls_from_json(content)
-                print("URLs:")
+                # print("URLs:")
                 domains = extract_domains(g_phishing_sites)     # Takes out only the domain name from each site
                 # # [print(url) for url in domains]
                 # print(f'Number of urls: {num_urls}')
@@ -190,6 +192,7 @@ def extract_domains(domains: list):
 # Return None if bad otherwise return IP
 def dns_lookup(url: str):
     # Old way might also change gethostbyname->getaddrinfo
+    global invalid_host_name_count
     """
     res = None
     try:
@@ -204,7 +207,8 @@ def dns_lookup(url: str):
     dns_query_string = f"https://dns.google/resolve?name={url_to_search}&type=A"
     response = requests.get(dns_query_string).json()
     if "Answer" not in response:
-        print("Invalid Hostname")
+        # print("Invalid Hostname")
+        invalid_host_name_count += 1
         return False
     dns_translation = response["Answer"][0]["data"]
     # print(f"Full Response:\n{response}")
@@ -470,14 +474,15 @@ def analyze_results():
         print(f"Phishing Webpages: {percent_phishing}")
         print(f"Legitimate Webpages: {percent_legit}")
         
-        print(f"Total pages failed to run: {total_failed}")
-        print(f"Total pages that ran succesfully: {total_pages_processed}")
+        print(f"# pages failed to run: {total_failed}")
+        print(f"# pages that ran succesfully: {total_pages_processed}")
+        print(f"# Invalid Hostname: {invalid_host_name_count}")
 
 # Used for making chunks
 def chunkify(lst,n):
-    #OLD: return [lst[i::n] for i in range(n)]
-    for i in range(0, len(lst), n):
-        yield lst[i:i+n]
+    return [lst[i::n] for i in range(n)]
+    # for i in range(0, len(lst), n):
+    #     yield lst[i:i+n]
 
 # Use threads to speed up scanning
 def launch_threads(prog_bar_obj, num_threads, test_data):
