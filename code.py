@@ -10,6 +10,7 @@ import random # Testing
 from alive_progress import alive_bar # Progress bar
 import threading # Multithreading for faster scanning
 from whitelist import load_whitelist, init_whitelist, update_whitelist, save_whitelist
+import csv
 
 """
 Note: Each entry in g_whitelist is a key-value pair => {key, val} = {domain, ip}
@@ -52,6 +53,8 @@ invalid_host_name_count = 0
 
 total_pages_processed = 0
 total_failed = 0 
+
+test_data_size = 0
 
 # % GOOD
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
@@ -480,6 +483,26 @@ def analyze_results():
         print(f"# pages failed to run: {total_failed}")
         print(f"# pages that ran succesfully: {total_pages_processed}")
         print(f"# Invalid Hostname: {invalid_host_name_count}")
+        
+        # Write results to csv for graphing and analysis
+        with open('results.csv', "w") as f:
+            csv_writer = csv.writer(f, delimiter=',', quotechar='"')
+            header = ["Threshold", "Total Sites", "Total Acutal Legit", "Total Actual Phishing", "Total Classified Phishing", "Total Classified Legitimate", "True Positive Rate", "False Positive Rate", "False Negative Rate", "True Negative Rate","Accuracy", "Phishing: Contains No hyperlinks", "Phishing: Contains Null Links", "Phishing: Points to Foreign domains","Legitimate: Contains No hyperlinks", "Legitimate: Contains Null Links", "Legitimate: Points to Foreign domains","% Phishing", "% Legitimate", "Pages that failed to run", "Pages that ran", "Invalid hostname count"]
+            
+            # Write the header row
+            csv_writer.writerow(header)
+            
+            data = [str(g_threshold), str(test_data_size), str(500), 
+                    str(test_data_size-500),str(total_phishing), str(total_legit), 
+                    str(true_positive_rate), str(false_positive_rate), str(false_negative_rate), str(true_negative_rate), str(accuracy),
+                    str(no_links_count_phishing), str(null_links_count_phishing), str(over_threshold_count_phishing),
+                    str(no_links_count_legit), str(null_links_count_legit), str(over_threshold_count_legit),
+                    str(percent_phishing), str(percent_legit),
+                    str(total_failed), str(total_pages_processed), str(invalid_host_name_count)]
+            
+            csv_writer.writerow(data)
+            print("Done writing data to file.")
+            
 
 # Used for making chunks
 def chunkify(lst,n):
@@ -560,7 +583,7 @@ def run_all_thresholds():
     global g_threshold
     global total_pages_processed
     global total_failed
-    
+    global test_data_size
     # Need to pass threshold 
     num_threads = int(input("Enter number of threads to use: "))
 
@@ -581,7 +604,8 @@ def run_all_thresholds():
         g_whitelist = init_whitelist()
         
         # Pack data for testing
-        test_data = prepare_data_for_run()  
+        test_data = prepare_data_for_run()
+        test_data_size = len(test_data)  
         print(f"\n\nTHRESHOLD: {g_threshold}\n\n")
         
         print("Launching threads")  
