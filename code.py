@@ -429,13 +429,6 @@ def run(webpage):
 
 # Mirror the same analysis as found in the paper
 def analyze_results():
-    # global over_threshold_count_legit
-    # global no_links_count_legit
-    # global null_links_count_legit
-    
-    # global over_threshold_count_phishing
-    # global no_links_count_phishing
-    # global null_links_count_phishing
     
     total_legit = len(g_determined_legitimate)
     total_phishing = len(g_determined_phishing)
@@ -458,7 +451,6 @@ def analyze_results():
         print(f"Legitmate classified as Legitimate: {true_negative_sum}\tTrue Negative Rate: {true_negative_rate}")
         print(f"Accuracy: {accuracy}")
     
-    
         print("\nCompare to Table 3 in paper\n")
         print(f"Total Phishing: {total_phishing}")
         print(f"No. of webpages that contain no hyperlinks: {no_links_count_phishing}")
@@ -480,14 +472,12 @@ def analyze_results():
         
         print(f"Total pages failed to run: {total_failed}")
         print(f"Total pages that ran succesfully: {total_pages_processed}")
-    
-    
-    
-    
 
 # Used for making chunks
 def chunkify(lst,n):
-    return [lst[i::n] for i in range(n)]
+    #OLD: return [lst[i::n] for i in range(n)]
+    for i in range(0, len(lst), n):
+        yield lst[i:i+n]
 
 # Use threads to speed up scanning
 def launch_threads(prog_bar_obj, num_threads, test_data):
