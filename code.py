@@ -537,9 +537,6 @@ def reset_all_globals():
     global total_failed
     
     g_whitelist = {}
-    g_phishing_sites = []
-    g_valid_sites = []
-    domains = []
     num_urls = 0
     g_threshold = 1010
     g_determined_phishing = []
@@ -568,6 +565,11 @@ def run_all_thresholds():
     num_threads = int(input("Enter number of threads to use: "))
 
     thresholds = [10,20,30,36,40,50,60,70,80,90]
+    
+    # Load in the site data for testing
+    load_phishing_sites()
+    load_valid_sites()
+    
     for threshold in thresholds:
         # Resets all of the global variables
         reset_all_globals()
@@ -577,10 +579,6 @@ def run_all_thresholds():
         
         # Init whitelist as empty
         g_whitelist = init_whitelist()
-        
-        # Load in the site data for testing
-        load_phishing_sites()
-        load_valid_sites()
         
         # Pack data for testing
         test_data = prepare_data_for_run()  
