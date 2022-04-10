@@ -54,7 +54,12 @@ invalid_host_name_count = 0
 total_pages_processed = 0
 total_failed = 0 
 
+total_phishing_processed = 0
+total_legit_processed = 0
+
 test_data_size = 0
+
+data = []
 
 # % GOOD
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
@@ -353,12 +358,14 @@ def phishing_identification_algo(webpage):
             null_links_count_legit += 1
         
     if ret_val > 80.0:
+    # if ret_val > g_threshold:
         # print("Webpage is Phishing")
         is_phishing = True
     
     count_self_ref_links = get_self_ref_links(webpage["site"])
 
     # ? This function relies on the results of the other two functions
+    # Percentage of foreign links
     ratio = calc_ratio(num_hyperlinks, count_self_ref_links)
 
     if ratio > g_threshold:
@@ -440,8 +447,9 @@ def run(webpage):
 # Mirror the same analysis as found in the paper
 def analyze_results():
     
-    total_legit = len(g_determined_legitimate)
-    total_phishing = len(g_determined_phishing)
+    #! CHANGE
+    total_legit = total_legit_processed
+    total_phishing = total_phishing_processed
     
     if total_phishing > 0 and total_legit > 0:
         
@@ -449,7 +457,7 @@ def analyze_results():
         false_positive_rate = (false_positive_sum / total_phishing ) * 100
         false_negative_rate = (false_negative_sum / total_legit) * 100
         true_negative_rate = (true_negative_sum / total_legit) * 100
-        accuracy = ((true_negative_sum + true_positive_sum) / (total_pages_processed)) * 100
+        accuracy = ((true_negative_sum + true_positive_sum) / (total_legit + total_phishing)) * 100
     
         print("\nCompare to Table 4 in paper\n")
         print(f"Total Phishing: {total_phishing}")
@@ -471,37 +479,39 @@ def analyze_results():
         print(f"No. of webpages that contain null links: {null_links_count_legit}")
         print(f"No. of webpages pointing to a foreign domain(>= threshold): {over_threshold_count_legit}")
         
-        
-        percent_phishing = 100 * (len(g_determined_phishing) / (total_pages_processed))
-        percent_legit = 100 * (len(g_determined_legitimate) / (total_pages_processed))
+        #! CHANGE 
+        percent_phishing = 100 * (len(g_determined_phishing) / (total_legit + total_phishing))
+        percent_legit = 100 * (len(g_determined_legitimate) / (total_legit + total_phishing))
         
         print("\nCompare to Table 2 in paper\n")
         print(f"Threshold (%): {g_threshold}")
-        print(f"Phishing Webpages: {percent_phishing}")
-        print(f"Legitimate Webpages: {percent_legit}")
+        print(f"Phishing Webpages foreign hyperlink ratio to all hyperlinks: {percent_phishing}")
+        print(f"Legitimate Webpages foreign hyperlink ratio to all hyperlinks: {percent_legit}")
         
         print(f"# pages failed to run: {total_failed}")
-        print(f"# pages that ran succesfully: {total_pages_processed}")
+        sum = total_legit + total_phishing
+        print(f"# pages that ran succesfully: {sum}")
         print(f"# Invalid Hostname: {invalid_host_name_count}")
         
-        # Write results to csv for graphing and analysis
-        with open('results.csv', "w") as f:
-            csv_writer = csv.writer(f, delimiter=',', quotechar='"')
-            header = ["Threshold", "Total Sites", "Total Acutal Legit", "Total Actual Phishing", "Total Classified Phishing", "Total Classified Legitimate", "True Positive Rate", "False Positive Rate", "False Negative Rate", "True Negative Rate","Accuracy", "Phishing: Contains No hyperlinks", "Phishing: Contains Null Links", "Phishing: Points to Foreign domains","Legitimate: Contains No hyperlinks", "Legitimate: Contains Null Links", "Legitimate: Points to Foreign domains","% Phishing", "% Legitimate", "Pages that failed to run", "Pages that ran", "Invalid hostname count"]
+        # # Write results to csv for graphing and analysis
+        # with open('results.csv', "w") as f:
+        #     csv_writer = csv.writer(f, delimiter=',', quotechar='"')
+        #     header = ["Threshold", "Total Sites", "Total Acutal Legit", "Total Actual Phishing", "Total Classified Phishing", "Total Classified Legitimate", "True Positive Rate", "False Positive Rate", "False Negative Rate", "True Negative Rate","Accuracy", "Phishing: Contains No hyperlinks", "Phishing: Contains Null Links", "Phishing: Points to Foreign domains","Legitimate: Contains No hyperlinks", "Legitimate: Contains Null Links", "Legitimate: Points to Foreign domains","% Phishing", "% Legitimate", "Pages that failed to run", "Pages that ran", "Invalid hostname count"]
             
-            # Write the header row
-            csv_writer.writerow(header)
+        #     # Write the header row
+        #     csv_writer.writerow(header)
+        
+        global data
+        data.append([str(g_threshold), str(test_data_size), str(500), 
+                str(test_data_size-500),str(total_phishing), str(total_legit), 
+                str(true_positive_rate), str(false_positive_rate), str(false_negative_rate), str(true_negative_rate), str(accuracy),
+                str(no_links_count_phishing), str(null_links_count_phishing), str(over_threshold_count_phishing),
+                str(no_links_count_legit), str(null_links_count_legit), str(over_threshold_count_legit),
+                str(percent_phishing), str(percent_legit),
+                str(total_failed), str(total_pages_processed), str(invalid_host_name_count)])
             
-            data = [str(g_threshold), str(test_data_size), str(500), 
-                    str(test_data_size-500),str(total_phishing), str(total_legit), 
-                    str(true_positive_rate), str(false_positive_rate), str(false_negative_rate), str(true_negative_rate), str(accuracy),
-                    str(no_links_count_phishing), str(null_links_count_phishing), str(over_threshold_count_phishing),
-                    str(no_links_count_legit), str(null_links_count_legit), str(over_threshold_count_legit),
-                    str(percent_phishing), str(percent_legit),
-                    str(total_failed), str(total_pages_processed), str(invalid_host_name_count)]
-            
-            csv_writer.writerow(data)
-            print("Done writing data to file.")
+            # csv_writer.writerow(data)
+            # print("Done writing data to file.")
             
 
 # Used for making chunks
@@ -559,6 +569,10 @@ def reset_all_globals():
     global total_pages_processed
     global total_failed
     
+    global total_phishing_processed
+    global total_legit_processed
+    global test_data_size
+    
     g_whitelist = {}
     num_urls = 0
     g_threshold = 1010
@@ -577,6 +591,9 @@ def reset_all_globals():
     invalid_host_name_count = 0
     total_pages_processed = 0
     total_failed = 0
+    total_phishing_processed = 0
+    total_legit_processed = 0
+    test_data_size = 0
              
 def run_all_thresholds():
     global g_whitelist
@@ -613,6 +630,16 @@ def run_all_thresholds():
             launch_threads(bar, num_threads, test_data)
             
         analyze_results()
+    
+    # Write results to csv for graphing and analysis
+    with open('results.csv', "w") as f:
+        csv_writer = csv.writer(f, delimiter=',', quotechar='"')
+        header = ["Threshold", "Total Sites", "Total Acutal Legit", "Total Actual Phishing", "Total Classified Phishing", "Total Classified Legitimate", "True Positive Rate", "False Positive Rate", "False Negative Rate", "True Negative Rate","Accuracy", "Phishing: Contains No hyperlinks", "Phishing: Contains Null Links", "Phishing: Points to Foreign domains","Legitimate: Contains No hyperlinks", "Legitimate: Contains Null Links", "Legitimate: Points to Foreign domains","% Phishing", "% Legitimate", "Pages that failed to run", "Pages that ran", "Invalid hostname count"]
+        
+        # Write the header row
+        csv_writer.writerow(header)
+        csv_writer.writerows(data)
+        print("done writing.")
     
 def main():
     global g_whitelist
@@ -715,6 +742,8 @@ def assert_res(site, res):
 def do_threading(sites, bar):
     global total_pages_processed
     global total_failed
+    global total_legit_processed
+    global total_phishing_processed
 
     for site in sites:
         # print(f"Running: {site}")
@@ -723,6 +752,10 @@ def do_threading(sites, bar):
             res = run(site)
             
             assert_res(site, res)
+            if site["is_phishing"] == True:
+                total_phishing_processed += 1
+            else:
+                total_legit_processed += 1
         except Exception as e:
             # Uncomment to see the exception raised
             # print(f"Exception caught: {e}")
@@ -737,4 +770,5 @@ if __name__ == "__main__":
     # test_extraction_functions()
     # dns_lookup('facebwook.com')
     # load_valid_sites()
+        
         
