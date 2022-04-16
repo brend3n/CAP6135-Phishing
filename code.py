@@ -61,6 +61,10 @@ test_data_size = 0
 
 data = []
 
+# Used for matching same sample size as paper
+max_phishing = 1120
+max_legit = 405
+
 # % GOOD
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
 # Scrapes active phishing sites from the list of sites (Fine repo in README) 
@@ -235,6 +239,7 @@ def get_domain(webpage: str):
 # % GOOD/
 # Extract the hyperlink set from the given webpage
 def calculate_hyperlink(url: str):
+    # ! TODO: fix timeout
     resp=requests.get(url,timeout=5)
     soup=bs(resp.text,'html.parser')
     num_links=0
@@ -356,7 +361,8 @@ def phishing_identification_algo(webpage):
             null_links_count_phishing += 1
         else:
             null_links_count_legit += 1
-        
+    
+    # ! TODO: Find out
     if ret_val > 80.0:
     # if ret_val > g_threshold:
         # print("Webpage is Phishing")
@@ -647,7 +653,7 @@ def main():
     global total_pages_processed
     global total_failed
     
-    res = int(input("Choose one of the following:\n1. Non-threading (Not recommended)\n2. Threading (Do this)\n3. Run all thresholds (Threading)\n"))
+    res = int(input("Choose one of the following:\n1. Non-threading (Not recommended for large sample sizes)\n2. Threading (Do this)\n3. Run all thresholds (Threading)\n"))
     if res == 1:
         do_regular()
     elif res == 2:
@@ -676,36 +682,50 @@ def main():
 
 # No threading here -> too slow
 def do_regular():
+    global g_whitelist
+    global g_threshold
+    global total_pages_processed
+    global total_failed
+    
+    global total_legit_processed
+    global total_phishing_processed
     
     g_threshold = int(input("Adjust threshold: "))
     
-    init_whitelist()
+    g_whitelist = init_whitelist()
+    
     load_phishing_sites()
     load_valid_sites()
     
-    total_pages_processed = 0
-    total_failed = 0    
+    # Pack data for testing
+    test_data = prepare_data_for_run()     
     
-    with alive_bar(len(g_phishing_sites)) as bar:
-        for site in g_phishing_sites:
-            # print(f"Running: {site}")
-            total_pages_processed+=1
+    with alive_bar(len(test_data)) as bar:
+        for site in test_data:
             bar()
+            if (total_phishing_processed >= max_phishing) and (total_legit_processed >= max_legit):
+                break 
             try:
+                
+                if (site["is_phishing"] == True) and (total_phishing_processed > max_phishing):
+                    continue
+                if (site["is_phishing"] == False) and (total_legit_processed > max_legit):
+                    continue
+                
                 res = run(site)
+                assert_res(site, res)
+                if site["is_phishing"] == True:
+                    total_phishing_processed += 1
+                else:
+                    total_legit_processed += 1
             except Exception as e:
                 # Uncomment to see the exception raised
                 # print(f"Exception caught: {e}")
                 total_failed+=1
                 continue
-            os.system('clear')
-            positionStr = 'Total pages processed: ' + str(total_pages_processed).rjust(5)
-            positionStr += '\nTotal Failed:          ' + str(total_failed).rjust(5)
-            positionStr += '\nTotal Legitimate:      ' + str(len(g_determined_legitimate)).rjust(5)
-            positionStr += '\nTotal Phishing:        ' + str(len(g_determined_phishing)).rjust(5)
-            print(positionStr, end='\n')
-            print('\b' * len(positionStr), end='', flush=True)    
-
+            total_pages_processed += 1
+    return
+            
 # Check to see if site was classified correctly 
 # res will be False if it is phishing, otherwise its True
 def assert_res(site, res):
@@ -748,10 +768,18 @@ def do_threading(sites, bar):
     for site in sites:
         # print(f"Running: {site}")
         bar()
+        if (total_phishing_processed >= max_phishing) and (total_legit_processed >= max_legit):
+                break
         try:
-            res = run(site)
             
+            if (site["is_phishing"] == True) and (total_phishing_processed > max_phishing):
+                continue
+            if (site["is_phishing"] == False) and (total_legit_processed > max_legit):
+                continue
+            
+            res = run(site)
             assert_res(site, res)
+            
             if site["is_phishing"] == True:
                 total_phishing_processed += 1
             else:
