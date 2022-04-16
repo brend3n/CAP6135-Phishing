@@ -125,7 +125,7 @@ def scrape_valid_sites():
 # % GOOD
 def load_valid_sites():
     global g_valid_sites
-    with open("./text_files/valid_sites.txt", "r") as f:
+    with open("./text_files/new_valid_sites.txt", "r") as f:
         lines = f.readlines()
         for line in lines:
             g_valid_sites.append(line[:-1])
