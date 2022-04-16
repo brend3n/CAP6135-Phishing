@@ -1,5 +1,5 @@
 Choose one of the following:
-1. Non-threading (Not recommended)
+1. Non-threading (Not recommended for large sample sizes)
 2. Threading (Do this)
 3. Run all thresholds (Threading)
 3
@@ -12,7 +12,8 @@ Enter:
 Enter: 
 1. Fetch data (Don't do this because API calls)
 2. Load data from test_data.json
-2
+1
+Done writing new json data to file.
 
 
 THRESHOLD: 10
@@ -20,38 +21,38 @@ THRESHOLD: 10
 
 Launching threads
 on 0: Starting 20 threads.
-|████████████████████████████████████████| 8843/8843 [100%] in 8:14.9 (17.87/s) 
+|████████████████████████████████████████| 9875/9875 [100%] in 5:14.4 (31.41/s) 
 
 Compare to Table 4 in paper
 
-Total Phishing: 3166
-Total Legitimate: 2559
+Total Phishing: 1134
+Total Legitimate: 699
 
-Phishing classified as Phishing: 3128	True Positive Rate: 98.79974731522427
-Phishing classified as Legitimate: 2283	False Positive Rate: 72.10991787744788
-Legitimate classified as Phishing: 38	False Negative Rate: 1.4849550605705353
-Legitmate classified as Legitimate: 276	True Negative Rate: 10.785463071512309
-Accuracy: 59.45851528384279
+Phishing classified as Phishing: 1099	True Positive Rate: 96.91358024691358
+Phishing classified as Legitimate: 35	False Positive Rate: 3.0864197530864197
+Legitimate classified as Phishing: 604	False Negative Rate: 86.40915593705293
+Legitmate classified as Legitimate: 95	True Negative Rate: 13.590844062947067
+Accuracy: 65.13911620294598
 
 Compare to Table 3 in paper
 
-Total Phishing: 3166
-No. of webpages that contain no hyperlinks: 2969
-No. of webpages that contain null links: 529
-No. of webpages pointing to a foreign domain(>= threshold): 0
-Total Legitimate: 2559
-No. of webpages that contain no hyperlinks: 34
-No. of webpages that contain null links: 156
-No. of webpages pointing to a foreign domain(>= threshold): 0
+Total Phishing: 1134
+No. of webpages that contain no hyperlinks: 401
+No. of webpages that contain null links: 510
+No. of webpages pointing to a foreign domain(>= threshold): 1096
+Total Legitimate: 699
+No. of webpages that contain no hyperlinks: 144
+No. of webpages that contain null links: 388
+No. of webpages pointing to a foreign domain(>= threshold): 603
 
 Compare to Table 2 in paper
 
 Threshold (%): 10
-Phishing Webpages: 55.30131004366812
-Legitimate Webpages: 44.698689956331876
-# pages failed to run: 3118
-# pages that ran succesfully: 5725
-# Invalid Hostname: 73
+Phishing Webpages foreign hyperlink ratio to all hyperlinks: 96.64902998236332
+Legitimate Webpages foreign hyperlink ratio to all hyperlinks: 86.26609442060087
+# pages failed to run: 2110
+# pages that ran succesfully: 1833
+# Invalid Hostname: 0
 
 
 THRESHOLD: 20
@@ -59,38 +60,38 @@ THRESHOLD: 20
 
 Launching threads
 on 0: Starting 20 threads.
-|████████████████████████████████████████⚠︎ (!) 8842/8843 [100%] in 8:19.4 (17.70/s) 
+|████████████████████████████████████████| 9875/9875 [100%] in 5:06.7 (32.20/s) 
 
 Compare to Table 4 in paper
 
-Total Phishing: 3382
-Total Legitimate: 2318
+Total Phishing: 1132
+Total Legitimate: 628
 
-Phishing classified as Phishing: 3342	True Positive Rate: 98.81726788882318
-Phishing classified as Legitimate: 2046	False Positive Rate: 60.49674748669427
-Legitimate classified as Phishing: 40	False Negative Rate: 1.7256255392579811
-Legitmate classified as Legitimate: 272	True Negative Rate: 11.73425366695427
-Accuracy: 63.40350877192983
+Phishing classified as Phishing: 1064	True Positive Rate: 93.99293286219081
+Phishing classified as Legitimate: 68	False Positive Rate: 6.007067137809187
+Legitimate classified as Phishing: 467	False Negative Rate: 74.36305732484077
+Legitmate classified as Legitimate: 161	True Negative Rate: 25.636942675159236
+Accuracy: 69.60227272727273
 
 Compare to Table 3 in paper
 
-Total Phishing: 3382
-No. of webpages that contain no hyperlinks: 2965
-No. of webpages that contain null links: 537
-No. of webpages pointing to a foreign domain(>= threshold): 0
-Total Legitimate: 2318
-No. of webpages that contain no hyperlinks: 34
-No. of webpages that contain null links: 153
-No. of webpages pointing to a foreign domain(>= threshold): 0
+Total Phishing: 1132
+No. of webpages that contain no hyperlinks: 392
+No. of webpages that contain null links: 506
+No. of webpages pointing to a foreign domain(>= threshold): 1061
+Total Legitimate: 628
+No. of webpages that contain no hyperlinks: 145
+No. of webpages that contain null links: 390
+No. of webpages pointing to a foreign domain(>= threshold): 466
 
 Compare to Table 2 in paper
 
 Threshold (%): 20
-Phishing Webpages: 59.333333333333336
-Legitimate Webpages: 40.666666666666664
-# pages failed to run: 3143
-# pages that ran succesfully: 5700
-# Invalid Hostname: 79
+Phishing Webpages foreign hyperlink ratio to all hyperlinks: 93.7279151943463
+Legitimate Webpages foreign hyperlink ratio to all hyperlinks: 74.20382165605095
+# pages failed to run: 2218
+# pages that ran succesfully: 1760
+# Invalid Hostname: 0
 
 
 THRESHOLD: 30
@@ -98,38 +99,38 @@ THRESHOLD: 30
 
 Launching threads
 on 0: Starting 20 threads.
-|████████████████████████████████████████| 8843/8843 [100%] in 8:18.6 (17.74/s) 
+|████████████████████████████████████████| 9875/9875 [100%] in 5:03.2 (32.57/s) 
 
 Compare to Table 4 in paper
 
-Total Phishing: 3160
-Total Legitimate: 2787
+Total Phishing: 1132
+Total Legitimate: 584
 
-Phishing classified as Phishing: 3126	True Positive Rate: 98.9240506329114
-Phishing classified as Legitimate: 2510	False Positive Rate: 79.43037974683544
-Legitimate classified as Phishing: 34	False Negative Rate: 1.2199497667743093
-Legitmate classified as Legitimate: 277	True Negative Rate: 9.939002511661284
-Accuracy: 57.22212880443921
+Phishing classified as Phishing: 1056	True Positive Rate: 93.28621908127208
+Phishing classified as Legitimate: 76	False Positive Rate: 6.713780918727916
+Legitimate classified as Phishing: 401	False Negative Rate: 68.66438356164383
+Legitmate classified as Legitimate: 183	True Negative Rate: 31.335616438356162
+Accuracy: 72.2027972027972
 
 Compare to Table 3 in paper
 
-Total Phishing: 3160
-No. of webpages that contain no hyperlinks: 3121
-No. of webpages that contain null links: 573
-No. of webpages pointing to a foreign domain(>= threshold): 0
-Total Legitimate: 2787
-No. of webpages that contain no hyperlinks: 33
-No. of webpages that contain null links: 154
-No. of webpages pointing to a foreign domain(>= threshold): 0
+Total Phishing: 1132
+No. of webpages that contain no hyperlinks: 377
+No. of webpages that contain null links: 517
+No. of webpages pointing to a foreign domain(>= threshold): 1053
+Total Legitimate: 584
+No. of webpages that contain no hyperlinks: 146
+No. of webpages that contain null links: 385
+No. of webpages pointing to a foreign domain(>= threshold): 399
 
 Compare to Table 2 in paper
 
 Threshold (%): 30
-Phishing Webpages: 53.13603497561796
-Legitimate Webpages: 46.86396502438204
-# pages failed to run: 2896
-# pages that ran succesfully: 5947
-# Invalid Hostname: 78
+Phishing Webpages foreign hyperlink ratio to all hyperlinks: 93.02120141342756
+Legitimate Webpages foreign hyperlink ratio to all hyperlinks: 68.32191780821918
+# pages failed to run: 2248
+# pages that ran succesfully: 1716
+# Invalid Hostname: 0
 
 
 THRESHOLD: 36
@@ -137,38 +138,38 @@ THRESHOLD: 36
 
 Launching threads
 on 0: Starting 20 threads.
-|████████████████████████████████████████| 8843/8843 [100%] in 8:19.8 (17.69/s) 
+|████████████████████████████████████████| 9875/9875 [100%] in 5:08.7 (31.99/s) 
 
 Compare to Table 4 in paper
 
-Total Phishing: 3218
-Total Legitimate: 2716
+Total Phishing: 1128
+Total Legitimate: 573
 
-Phishing classified as Phishing: 3183	True Positive Rate: 98.91236793039154
-Phishing classified as Legitimate: 2441	False Positive Rate: 75.85456805469235
-Legitimate classified as Phishing: 35	False Negative Rate: 1.2886597938144329
-Legitmate classified as Legitimate: 275	True Negative Rate: 10.125184094256259
-Accuracy: 58.27435119649478
+Phishing classified as Phishing: 1052	True Positive Rate: 93.26241134751773
+Phishing classified as Legitimate: 76	False Positive Rate: 6.73758865248227
+Legitimate classified as Phishing: 385	False Negative Rate: 67.19022687609075
+Legitmate classified as Legitimate: 188	True Negative Rate: 32.809773123909245
+Accuracy: 72.89829512051735
 
 Compare to Table 3 in paper
 
-Total Phishing: 3218
-No. of webpages that contain no hyperlinks: 3146
-No. of webpages that contain null links: 568
-No. of webpages pointing to a foreign domain(>= threshold): 0
-Total Legitimate: 2716
-No. of webpages that contain no hyperlinks: 32
-No. of webpages that contain null links: 153
-No. of webpages pointing to a foreign domain(>= threshold): 0
+Total Phishing: 1128
+No. of webpages that contain no hyperlinks: 388
+No. of webpages that contain null links: 504
+No. of webpages pointing to a foreign domain(>= threshold): 1050
+Total Legitimate: 573
+No. of webpages that contain no hyperlinks: 146
+No. of webpages that contain null links: 388
+No. of webpages pointing to a foreign domain(>= threshold): 384
 
 Compare to Table 2 in paper
 
 Threshold (%): 36
-Phishing Webpages: 54.22986181327941
-Legitimate Webpages: 45.770138186720594
-# pages failed to run: 2909
-# pages that ran succesfully: 5934
-# Invalid Hostname: 75
+Phishing Webpages foreign hyperlink ratio to all hyperlinks: 93.08510638297872
+Legitimate Webpages foreign hyperlink ratio to all hyperlinks: 67.01570680628272
+# pages failed to run: 2190
+# pages that ran succesfully: 1701
+# Invalid Hostname: 0
 
 
 THRESHOLD: 40
@@ -176,38 +177,38 @@ THRESHOLD: 40
 
 Launching threads
 on 0: Starting 20 threads.
-|████████████████████████████████████████| 8843/8843 [100%] in 8:13.4 (17.92/s) 
+|████████████████████████████████████████| 9875/9875 [100%] in 5:04.5 (32.43/s) 
 
 Compare to Table 4 in paper
 
-Total Phishing: 3290
-Total Legitimate: 2741
+Total Phishing: 1131
+Total Legitimate: 572
 
-Phishing classified as Phishing: 3254	True Positive Rate: 98.90577507598785
-Phishing classified as Legitimate: 2468	False Positive Rate: 75.01519756838906
-Legitimate classified as Phishing: 36	False Negative Rate: 1.3133892739875956
-Legitmate classified as Legitimate: 273	True Negative Rate: 9.959868661072601
-Accuracy: 58.48118056707013
+Phishing classified as Phishing: 1054	True Positive Rate: 93.1918656056587
+Phishing classified as Legitimate: 77	False Positive Rate: 6.80813439434129
+Legitimate classified as Phishing: 380	False Negative Rate: 66.43356643356644
+Legitmate classified as Legitimate: 192	True Negative Rate: 33.56643356643357
+Accuracy: 73.1650029359953
 
 Compare to Table 3 in paper
 
-Total Phishing: 3290
-No. of webpages that contain no hyperlinks: 3175
-No. of webpages that contain null links: 579
-No. of webpages pointing to a foreign domain(>= threshold): 0
-Total Legitimate: 2741
-No. of webpages that contain no hyperlinks: 34
-No. of webpages that contain null links: 151
-No. of webpages pointing to a foreign domain(>= threshold): 0
+Total Phishing: 1131
+No. of webpages that contain no hyperlinks: 390
+No. of webpages that contain null links: 501
+No. of webpages pointing to a foreign domain(>= threshold): 1050
+Total Legitimate: 572
+No. of webpages that contain no hyperlinks: 144
+No. of webpages that contain null links: 392
+No. of webpages pointing to a foreign domain(>= threshold): 378
 
 Compare to Table 2 in paper
 
 Threshold (%): 40
-Phishing Webpages: 54.55148399933676
-Legitimate Webpages: 45.44851600066324
-# pages failed to run: 2812
-# pages that ran succesfully: 6031
-# Invalid Hostname: 73
+Phishing Webpages foreign hyperlink ratio to all hyperlinks: 92.83819628647215
+Legitimate Webpages foreign hyperlink ratio to all hyperlinks: 66.08391608391608
+# pages failed to run: 2237
+# pages that ran succesfully: 1703
+# Invalid Hostname: 0
 
 
 THRESHOLD: 50
@@ -215,38 +216,38 @@ THRESHOLD: 50
 
 Launching threads
 on 0: Starting 20 threads.
-|████████████████████████████████████████| 8843/8843 [100%] in 8:00.1 (18.42/s) 
+|████████████████████████████████████████| 9875/9875 [100%] in 5:50.7 (28.16/s) 
 
 Compare to Table 4 in paper
 
-Total Phishing: 3466
-Total Legitimate: 2275
+Total Phishing: 1132
+Total Legitimate: 510
 
-Phishing classified as Phishing: 3427	True Positive Rate: 98.87478361223312
-Phishing classified as Legitimate: 2006	False Positive Rate: 57.87651471436814
-Legitimate classified as Phishing: 39	False Negative Rate: 1.7142857142857144
-Legitmate classified as Legitimate: 269	True Negative Rate: 11.824175824175825
-Accuracy: 64.37902804389479
+Phishing classified as Phishing: 1050	True Positive Rate: 92.75618374558304
+Phishing classified as Legitimate: 82	False Positive Rate: 7.243816254416961
+Legitimate classified as Phishing: 303	False Negative Rate: 59.411764705882355
+Legitmate classified as Legitimate: 207	True Negative Rate: 40.588235294117645
+Accuracy: 76.55298416565165
 
 Compare to Table 3 in paper
 
-Total Phishing: 3466
-No. of webpages that contain no hyperlinks: 3132
-No. of webpages that contain null links: 478
-No. of webpages pointing to a foreign domain(>= threshold): 0
-Total Legitimate: 2275
-No. of webpages that contain no hyperlinks: 33
-No. of webpages that contain null links: 154
-No. of webpages pointing to a foreign domain(>= threshold): 0
+Total Phishing: 1132
+No. of webpages that contain no hyperlinks: 379
+No. of webpages that contain null links: 511
+No. of webpages pointing to a foreign domain(>= threshold): 1047
+Total Legitimate: 510
+No. of webpages that contain no hyperlinks: 147
+No. of webpages that contain null links: 389
+No. of webpages pointing to a foreign domain(>= threshold): 302
 
 Compare to Table 2 in paper
 
 Threshold (%): 50
-Phishing Webpages: 60.372757359345066
-Legitimate Webpages: 39.627242640654934
-# pages failed to run: 3102
-# pages that ran succesfully: 5741
-# Invalid Hostname: 74
+Phishing Webpages foreign hyperlink ratio to all hyperlinks: 92.49116607773851
+Legitimate Webpages foreign hyperlink ratio to all hyperlinks: 59.21568627450981
+# pages failed to run: 2300
+# pages that ran succesfully: 1642
+# Invalid Hostname: 0
 
 
 THRESHOLD: 60
@@ -254,38 +255,38 @@ THRESHOLD: 60
 
 Launching threads
 on 0: Starting 20 threads.
-|████████████████████████████████████████| 8843/8843 [100%] in 8:16.2 (17.82/s) 
+|████████████████████████████████████████| 9875/9875 [100%] in 5:24.3 (30.45/s) 
 
 Compare to Table 4 in paper
 
-Total Phishing: 3295
-Total Legitimate: 2630
+Total Phishing: 1130
+Total Legitimate: 486
 
-Phishing classified as Phishing: 3255	True Positive Rate: 98.78603945371776
-Phishing classified as Legitimate: 2359	False Positive Rate: 71.59332321699546
-Legitimate classified as Phishing: 40	False Negative Rate: 1.520912547528517
-Legitmate classified as Legitimate: 271	True Negative Rate: 10.304182509505704
-Accuracy: 59.51054852320675
+Phishing classified as Phishing: 1045	True Positive Rate: 92.47787610619469
+Phishing classified as Legitimate: 85	False Positive Rate: 7.52212389380531
+Legitimate classified as Phishing: 259	False Negative Rate: 53.29218106995884
+Legitmate classified as Legitimate: 227	True Negative Rate: 46.70781893004115
+Accuracy: 78.71287128712872
 
 Compare to Table 3 in paper
 
-Total Phishing: 3295
-No. of webpages that contain no hyperlinks: 3071
-No. of webpages that contain null links: 569
-No. of webpages pointing to a foreign domain(>= threshold): 0
-Total Legitimate: 2630
-No. of webpages that contain no hyperlinks: 34
-No. of webpages that contain null links: 155
-No. of webpages pointing to a foreign domain(>= threshold): 0
+Total Phishing: 1130
+No. of webpages that contain no hyperlinks: 392
+No. of webpages that contain null links: 499
+No. of webpages pointing to a foreign domain(>= threshold): 1044
+Total Legitimate: 486
+No. of webpages that contain no hyperlinks: 146
+No. of webpages that contain null links: 386
+No. of webpages pointing to a foreign domain(>= threshold): 258
 
 Compare to Table 2 in paper
 
 Threshold (%): 60
-Phishing Webpages: 55.61181434599156
-Legitimate Webpages: 44.38818565400844
-# pages failed to run: 2918
-# pages that ran succesfully: 5925
-# Invalid Hostname: 76
+Phishing Webpages foreign hyperlink ratio to all hyperlinks: 92.38938053097345
+Legitimate Webpages foreign hyperlink ratio to all hyperlinks: 53.086419753086425
+# pages failed to run: 2272
+# pages that ran succesfully: 1616
+# Invalid Hostname: 0
 
 
 THRESHOLD: 70
@@ -293,38 +294,38 @@ THRESHOLD: 70
 
 Launching threads
 on 0: Starting 20 threads.
-|████████████████████████████████████████| 8843/8843 [100%] in 7:51.9 (18.74/s) 
+|████████████████████████████████████████| 9875/9875 [100%] in 5:07.5 (32.12/s) 
 
 Compare to Table 4 in paper
 
-Total Phishing: 3537
-Total Legitimate: 2418
+Total Phishing: 1128
+Total Legitimate: 480
 
-Phishing classified as Phishing: 3498	True Positive Rate: 98.89737065309583
-Phishing classified as Legitimate: 2144	False Positive Rate: 60.61634153237206
-Legitimate classified as Phishing: 39	False Negative Rate: 1.6129032258064515
-Legitmate classified as Legitimate: 274	True Negative Rate: 11.331679073614557
-Accuracy: 63.34172963895885
+Phishing classified as Phishing: 1031	True Positive Rate: 91.40070921985816
+Phishing classified as Legitimate: 97	False Positive Rate: 8.599290780141844
+Legitimate classified as Phishing: 246	False Negative Rate: 51.24999999999999
+Legitmate classified as Legitimate: 234	True Negative Rate: 48.75
+Accuracy: 78.66915422885572
 
 Compare to Table 3 in paper
 
-Total Phishing: 3537
-No. of webpages that contain no hyperlinks: 3210
-No. of webpages that contain null links: 584
-No. of webpages pointing to a foreign domain(>= threshold): 0
-Total Legitimate: 2418
-No. of webpages that contain no hyperlinks: 34
-No. of webpages that contain null links: 154
-No. of webpages pointing to a foreign domain(>= threshold): 0
+Total Phishing: 1128
+No. of webpages that contain no hyperlinks: 378
+No. of webpages that contain null links: 511
+No. of webpages pointing to a foreign domain(>= threshold): 1022
+Total Legitimate: 480
+No. of webpages that contain no hyperlinks: 145
+No. of webpages that contain null links: 386
+No. of webpages pointing to a foreign domain(>= threshold): 244
 
 Compare to Table 2 in paper
 
 Threshold (%): 70
-Phishing Webpages: 59.395465994962215
-Legitimate Webpages: 40.604534005037785
-# pages failed to run: 2888
-# pages that ran succesfully: 5955
-# Invalid Hostname: 76
+Phishing Webpages foreign hyperlink ratio to all hyperlinks: 90.60283687943263
+Legitimate Webpages foreign hyperlink ratio to all hyperlinks: 50.83333333333333
+# pages failed to run: 2360
+# pages that ran succesfully: 1608
+# Invalid Hostname: 0
 
 
 THRESHOLD: 80
@@ -332,38 +333,38 @@ THRESHOLD: 80
 
 Launching threads
 on 0: Starting 20 threads.
-|████████████████████████████████████████| 8843/8843 [100%] in 7:37.1 (19.35/s) 
+|████████████████████████████████████████| 9875/9875 [100%] in 5:09.4 (31.92/s) 
 
 Compare to Table 4 in paper
 
-Total Phishing: 3439
-Total Legitimate: 2265
+Total Phishing: 1133
+Total Legitimate: 473
 
-Phishing classified as Phishing: 3400	True Positive Rate: 98.86594940389648
-Phishing classified as Legitimate: 1994	False Positive Rate: 57.981971503344
-Legitimate classified as Phishing: 39	False Negative Rate: 1.7218543046357615
-Legitmate classified as Legitimate: 271	True Negative Rate: 11.964679911699779
-Accuracy: 64.35834502103786
+Phishing classified as Phishing: 1038	True Positive Rate: 91.61518093556928
+Phishing classified as Legitimate: 95	False Positive Rate: 8.384819064430715
+Legitimate classified as Phishing: 236	False Negative Rate: 49.89429175475687
+Legitmate classified as Legitimate: 237	True Negative Rate: 50.10570824524313
+Accuracy: 79.38978829389788
 
 Compare to Table 3 in paper
 
-Total Phishing: 3439
-No. of webpages that contain no hyperlinks: 3097
-No. of webpages that contain null links: 528
-No. of webpages pointing to a foreign domain(>= threshold): 0
-Total Legitimate: 2265
-No. of webpages that contain no hyperlinks: 33
-No. of webpages that contain null links: 154
-No. of webpages pointing to a foreign domain(>= threshold): 0
+Total Phishing: 1133
+No. of webpages that contain no hyperlinks: 375
+No. of webpages that contain null links: 514
+No. of webpages pointing to a foreign domain(>= threshold): 1023
+Total Legitimate: 473
+No. of webpages that contain no hyperlinks: 147
+No. of webpages that contain null links: 384
+No. of webpages pointing to a foreign domain(>= threshold): 234
 
 Compare to Table 2 in paper
 
 Threshold (%): 80
-Phishing Webpages: 60.29102384291725
-Legitimate Webpages: 39.708976157082745
-# pages failed to run: 3139
-# pages that ran succesfully: 5704
-# Invalid Hostname: 73
+Phishing Webpages foreign hyperlink ratio to all hyperlinks: 90.29126213592234
+Legitimate Webpages foreign hyperlink ratio to all hyperlinks: 49.471458773784356
+# pages failed to run: 2350
+# pages that ran succesfully: 1606
+# Invalid Hostname: 0
 
 
 THRESHOLD: 90
@@ -371,36 +372,37 @@ THRESHOLD: 90
 
 Launching threads
 on 0: Starting 20 threads.
-|████████████████████████████████████████| 8843/8843 [100%] in 8:05.4 (18.22/s) 
+|████████████████████████████████████████| 9875/9875 [100%] in 5:06.4 (32.22/s) 
 
 Compare to Table 4 in paper
 
-Total Phishing: 3356
-Total Legitimate: 2431
+Total Phishing: 1131
+Total Legitimate: 468
 
-Phishing classified as Phishing: 3317	True Positive Rate: 98.83790226460071
-Phishing classified as Legitimate: 2161	False Positive Rate: 64.39213349225268
-Legitimate classified as Phishing: 39	False Negative Rate: 1.6042780748663104
-Legitmate classified as Legitimate: 270	True Negative Rate: 11.106540518305225
-Accuracy: 61.98375669604286
+Phishing classified as Phishing: 1026	True Positive Rate: 90.71618037135278
+Phishing classified as Legitimate: 105	False Positive Rate: 9.283819628647215
+Legitimate classified as Phishing: 227	False Negative Rate: 48.504273504273506
+Legitmate classified as Legitimate: 241	True Negative Rate: 51.49572649572649
+Accuracy: 79.23702313946215
 
 Compare to Table 3 in paper
 
-Total Phishing: 3356
-No. of webpages that contain no hyperlinks: 3060
-No. of webpages that contain null links: 537
-No. of webpages pointing to a foreign domain(>= threshold): 0
-Total Legitimate: 2431
-No. of webpages that contain no hyperlinks: 34
-No. of webpages that contain null links: 155
-No. of webpages pointing to a foreign domain(>= threshold): 0
+Total Phishing: 1131
+No. of webpages that contain no hyperlinks: 385
+No. of webpages that contain null links: 513
+No. of webpages pointing to a foreign domain(>= threshold): 1013
+Total Legitimate: 468
+No. of webpages that contain no hyperlinks: 147
+No. of webpages that contain null links: 385
+No. of webpages pointing to a foreign domain(>= threshold): 225
 
 Compare to Table 2 in paper
 
 Threshold (%): 90
-Phishing Webpages: 57.992051149127356
-Legitimate Webpages: 42.007948850872644
-# pages failed to run: 3056
-# pages that ran succesfully: 5787
-# Invalid Hostname: 74
+Phishing Webpages foreign hyperlink ratio to all hyperlinks: 89.56675508399647
+Legitimate Webpages foreign hyperlink ratio to all hyperlinks: 48.07692307692308
+# pages failed to run: 2354
+# pages that ran succesfully: 1599
+# Invalid Hostname: 0
+done writing.
 

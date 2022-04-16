@@ -62,8 +62,11 @@ test_data_size = 0
 data = []
 
 # Used for matching same sample size as paper
+# max_phishing = 1120
+# max_legit = 405
+
 max_phishing = 1120
-max_legit = 405
+max_legit = 1120
 
 # % GOOD
 # Create an account, add user_agent to request, and parse json data -> Currently being rate limited
@@ -163,6 +166,14 @@ def prepare_data_for_run():
     # Stores the new structure
     test_data = []
     
+    # Setting the valid sites
+    for site in g_valid_sites:
+        test_data.append({
+            "site":site,
+            "domain":get_domain(site).replace("www", ""),
+            "is_phishing": False
+        })
+    
     # Setting the phishing sites
     for site in g_phishing_sites:
         test_data.append({
@@ -171,13 +182,6 @@ def prepare_data_for_run():
             "is_phishing": True
         })
     
-    # Setting the valid sites
-    for site in g_valid_sites:
-        test_data.append({
-            "site":site,
-            "domain":get_domain(site).replace("www", ""),
-            "is_phishing": False
-        })
     
     return test_data
 
@@ -485,9 +489,9 @@ def analyze_results():
         print(f"No. of webpages that contain null links: {null_links_count_legit}")
         print(f"No. of webpages pointing to a foreign domain(>= threshold): {over_threshold_count_legit}")
         
-        #! CHANGE 
-        percent_phishing = 100 * (len(g_determined_phishing) / (total_legit + total_phishing))
-        percent_legit = 100 * (len(g_determined_legitimate) / (total_legit + total_phishing))
+        # Percent of over threshold value
+        percent_phishing = 100 * (over_threshold_count_phishing / (total_phishing))
+        percent_legit = 100 * (over_threshold_count_legit / (total_legit))
         
         print("\nCompare to Table 2 in paper\n")
         print(f"Threshold (%): {g_threshold}")
@@ -735,7 +739,7 @@ def assert_res(site, res):
     global false_negative_sum
     global true_negative_sum
     
-    # Site is Phishing but model says its le
+    # Site is Phishing but model says its legit
     if site["is_phishing"] == True and res == True:
         # % False Positive
         # print("False Positive")
